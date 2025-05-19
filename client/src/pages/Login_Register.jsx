@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import { useLoginMutation } from '../services/ApiSlice';
-
-
+import {useNavigate} from "react-router"
+import { setUser } from '../features/UserSlice';
+import { useDispatch} from 'react-redux';
 
 
 const Login_Register = () => {
-   const [user_name, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [login, { data, isLoading, isError, error }] = useLoginMutation();
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const [user_name, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [login, { data, isLoading, isError, error }] = useLoginMutation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await login({ user_name, password }).unwrap();
       console.log('Login successful:', response);
+      dispatch(setUser({user_name:response.user.user_name , role : response.user.role}))
+      navigate("/UserDashboard")
     } catch (err) {
       console.error('Login failed:', err);
     }
@@ -47,11 +53,6 @@ const Login_Register = () => {
       </form>
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error: {error?.data?.error || error.message}</p>}
-      {data && (
-        <p>
-          Welcome, {data.user.user_name}! Role: {data.user.role}
-        </p>
-      )}
     </div>
   );
 };
