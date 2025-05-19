@@ -1,28 +1,30 @@
-import { useGetEventsQuery } from './services/ApiSlice';
+import {createBrowserRouter, RouterProvider , Route , createRoutesFromElements} from "react-router"
+import React from 'react'
 import './App.css';
-
-function App() {
-  const { data: Events, isLoading, isError, error } = useGetEventsQuery();
-  console.log('Events:', Events, 'isLoading:', isLoading, 'isError:', isError, 'error:', error);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error?.data?.details || error.message}</div>;
-
+import Layout from "./Layout";
+import Login_Register from "./pages/Login_Register";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+import UserDashboard from "./pages/UserDashboard";
+const App = () => {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="" element={<Layout></Layout>}>
+        <Route path="/" element={<Login_Register></Login_Register>}></Route>
+        <Route path="/UserDashboard" element={<UserDashboard></UserDashboard>}></Route>
+     
+      </Route>
+    )
+  )
   return (
-    <>
-      <h1>Events</h1>
-      <button onClick={() => console.log(Events)}>Log Events</button>
-      <ul>
-        {Events?.data?.length > 0 ? (
-          Events.data.map((event) => (
-            <li key={event.id}>{event.title}</li>
-          ))
-        ) : (
-          <li>No events found</li>
-        )}
-      </ul>
-    </>
-  );
-}
+    
+    <Provider store={store}>
+      <RouterProvider router={router}>
 
-export default App;
+      </RouterProvider>
+    </Provider>
+    
+    
+  )
+}
+export default App

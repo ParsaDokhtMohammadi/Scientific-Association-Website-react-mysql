@@ -1,9 +1,21 @@
 import {createApi , fetchBaseQuery} from "@reduxjs/toolkit/query/react"
 export const ApiSlice = createApi({
     reducerPath:"DBApi",
-    baseQuery : fetchBaseQuery({baseUrl:"http://localhost:3000"}),
+    baseQuery : fetchBaseQuery({baseUrl:"http://localhost:5000"}),
     endpoints : (builder) => ({
-        getEvents : builder.query({query: () => "/getEvents"})
+        getEvents : builder.query({query: () => "/getEvents"}),
+        getUsers : builder.query({query:()=>"/getUsers"}),
+        getNews : builder.query({query: ()=> "/getNews"}),
+
+
+
+        Login : builder.mutation({
+            query:(credentials) =>({
+                url: "/Login",
+                method: "POST",
+                body : credentials
+            })
+        })
     })
 })
 
@@ -11,4 +23,4 @@ export const ApiSlice = createApi({
 
 
 
-export const {useGetEventsQuery} = ApiSlice
+export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation} = ApiSlice

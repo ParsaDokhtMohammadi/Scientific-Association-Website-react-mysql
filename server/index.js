@@ -1,10 +1,14 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const mysql = require('mysql2/promise');
-const cors = require("cors");
+const cors = require('cors');
 require('dotenv').config();
 app.use(express.json());
-app.use(cors)
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 async function initializeDatabase() {
   try {
@@ -15,31 +19,63 @@ async function initializeDatabase() {
       database: process.env.DB_DATABASE,
     });
     console.log('Successfully connected to MySQL database!');
-    return db; 
+    return db;
   } catch (error) {
     console.error('Failed to connect to MySQL:', error.message);
-    process.exit(1);
+    throw error;
   }
 }
 
 async function startServer() {
-  const db = await initializeDatabase();
+  let db;
+  try {
+    db = await initializeDatabase();
+  } catch (error) {
+    console.error('Server startup failed:', error.message);
+    process.exit(1);
+  }
 
-  app.get('/test-db', async (req, res) => {
+
+  // Events route
+  app.get('/getEvents', async (req, res) => {
     try {
-      const [rows] = await db.query('SELECT * FROM user LIMIT 1');
-      res.json({ message: 'Database connected', data: rows });
+      const [rows] = await db.query('SELECT * FROM events');
+      res.json({ data: rows });
     } catch (error) {
-      res.status(500).json({ error: 'Database query failed', details: error.message });
+      console.error('Error in /getEvents:', error.message);
+      res.status(500).json({ error: 'Query failed', details: error.message });
     }
   });
 
-  app.get('/getEvents' , async (req , res)=>{
-    const [rows] = await db.query ('SELECT * FROM events')
+  app.get("/getUsers" , async (req , res)=>{
+    const [rows] = await db.query("SELECT * FROM user")
+    res.json({data:rows})
+  }) 
+
+  app.get("/getNews" , async (req , res)=>{
+    const [rows] = db.query("SELECT * FROM news")
     res.json({data:rows})
   })
 
-  const PORT = process.env.PORT || 3000;
+  app.post("/Login" , async (req , res)=>{
+    const {user_name , password} = req.body
+    const [rows] = await db.query("SELECT * FROM user where user_name = ?",[user_name])
+    const user = rows[0]
+    if(!user){
+      return res.status(401).json({error:"user does not exist"})
+    }
+    else if (user.password!==password){
+      return res.status(401).json({error:"password is incorect"})
+    }
+    res.json({
+      message: 'Login successful',
+      user: { id: user.id, user_name: user.user_name, role: user.role },
+    });
+  })
+
+
+
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
