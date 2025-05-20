@@ -5,7 +5,7 @@ const Events = () => {
    const {data:Events , isLoading , error} = useGetEventsQuery()
     console.log(Events)
   return (
-    <div className='flex flex-wrap gap-4 justify-center'>
+    <div className='flex flex-wrap gap-4 justify-center p-8'>
         {Events?.data.map(Event=>(
           <EventCard Event={Event}></EventCard>
         ))}

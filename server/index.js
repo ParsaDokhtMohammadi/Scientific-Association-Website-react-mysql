@@ -97,6 +97,20 @@ async function startServer() {
     }
   })
 
+app.delete("/DeleteEvent", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+   
+
+    await db.query("DELETE FROM events WHERE id = ?", [id]);
+
+    res.json({ message: "Event deleted" });
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
