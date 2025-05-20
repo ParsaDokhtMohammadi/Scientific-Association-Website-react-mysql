@@ -72,7 +72,30 @@ async function startServer() {
       user: { id: user.id, user_name: user.user_name, role: user.role },
     });
   })
-
+  app.post("/Register" , async (req ,res)=>{
+    try{
+      const {user_name , password , email} = req.body
+    const [rows] = await db.query("SELECT * FROM user where user_name = ?",[user_name])
+    const [rows2] = await db.query("select email from user where email = ?" , [email])
+    const user = rows[0]
+    const UserEmail = rows2[0]
+    if(user){
+      return res.status(400).json({error:"user already exists"})
+    }
+    if (UserEmail){
+      return res.status(400).json({error:"a user with this email already exists"})
+    }
+    await db.query("insert into user (email ,password,user_name,role) values(?,?,?,?)",[email,password,user_name,"user"])
+    res.json({
+      message : "register successful",
+     
+    })
+    }
+    catch (error){
+      console.error('Error in /Register:', error.message);
+      res.status(500).json({ error: 'Query failed', details: error.message });
+    }
+  })
 
 
   const PORT = process.env.PORT || 5000;

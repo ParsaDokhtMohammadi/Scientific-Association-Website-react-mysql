@@ -15,6 +15,13 @@ export const ApiSlice = createApi({
                 method: "POST",
                 body : credentials
             })
+        }),
+        Register : builder.mutation({
+            query:(credentials)=>({
+                url:"/Register",
+                method:"POST",
+                body : credentials
+            })
         })
     })
 })
@@ -23,4 +30,4 @@ export const ApiSlice = createApi({
 
 
 
-export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation} = ApiSlice
+export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation} = ApiSlice

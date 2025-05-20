@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useLoginMutation } from '../services/ApiSlice';
+import React, {useState} from 'react';
+import {useLoginMutation} from '../services/ApiSlice';
 import {useNavigate} from "react-router"
-import { setUser } from '../features/UserSlice';
-import { useDispatch} from 'react-redux';
+import {setUser} from '../features/UserSlice';
+import {useDispatch} from 'react-redux';
 
 
-const Login_Register = () => {
+const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -58,4 +58,4 @@ const Login_Register = () => {
 };
 
 
-export default Login_Register
+export default Login
