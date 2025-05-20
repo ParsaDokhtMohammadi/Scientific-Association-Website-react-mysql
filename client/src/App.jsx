@@ -8,6 +8,9 @@ import { store } from "./store/store";
 import UserDashboard from "./pages/UserDashboard";
 import Events from "./pages/Events"
 import News from "./pages/News"
+import Submission from "./pages/Submission";
+import UsersAdmin from "./pages/UsersAdmin";
+import SubmissionAdmin from "./pages/SubmissionAdmin";
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -17,6 +20,9 @@ const App = () => {
         <Route path="/Register" element={<Register></Register>}></Route>
         <Route path="/Events" element={<Events></Events>}></Route>
         <Route path="/News" element={<News></News>}></Route>
+        <Route path="/Submission" element={<Submission></Submission>}></Route>
+        <Route path="/UsersAdmin" element={<UsersAdmin></UsersAdmin>}></Route>
+        <Route path="/SubmissionAdmin" element={<SubmissionAdmin></SubmissionAdmin>}></Route>
      
       </Route>
     )
