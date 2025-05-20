@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate()
   console.log(User)
   return (
-    <header className="w-full bg-[#3B82F6] flex justify-between items-center px-3 sticky">
+    <header className="w-full bg-[#3B82F6] flex justify-between items-center px-3  mb-8">
       <img src="assets/img/logo.png" className="w-[75px] " />
       <div className="flex ">
       <nav className="flex flex-row items-center gap-3">
