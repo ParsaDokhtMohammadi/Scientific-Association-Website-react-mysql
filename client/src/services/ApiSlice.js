@@ -6,7 +6,7 @@ export const ApiSlice = createApi({
     endpoints : (builder) => ({
         getEvents : builder.query({query: () => "/getEvents",providesTags: ['Events'],}),
         getUsers : builder.query({query:()=>"/getUsers"}),
-        getNews : builder.query({query: ()=> "/getNews"}),
+        getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
 
 
 
@@ -31,6 +31,14 @@ export const ApiSlice = createApi({
                 body: credentials
             }),
             invalidatesTags: ['Events']
+        }),
+        DeleteNews : builder.mutation({
+            query:(credentials)=>({
+                url:"/DeleteNews",
+                method:"DELETE",
+                body:credentials
+            }),
+            invalidatesTags : ["news"]
         })
     })
 })

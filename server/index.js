@@ -110,12 +110,27 @@ app.delete("/DeleteEvent", async (req, res) => {
     console.error("Error deleting event:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+})
+
+app.delete("/DeleteNews" , async(req , res)=>{
+  try{
+    const {id} = req.body
+    await db.query("Delete from news where id = ?",[id])
+    res.join({message:"news deleted"})
+  }
+  catch (error){
+    console.error("error deleting news" , error)
+    res.status(500).json({error:"internal server error"})
+  }
+
+})
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+  
 }
+
 
 startServer();

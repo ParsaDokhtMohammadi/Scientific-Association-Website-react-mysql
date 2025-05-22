@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import DeletePopup from './DeletePopup'
 
 const EventCard = (Event) => {
-    const User = useSelector(state => state.CurrentUser.CurrentUser)
+    const User = useSelector(state => state.CurrentUser.CurrentUser) 
     const [showDeletePopup, setShowDeletePopup] = useState(false)
 
     return (
