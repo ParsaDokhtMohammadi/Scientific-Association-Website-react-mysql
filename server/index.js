@@ -53,8 +53,14 @@ async function startServer() {
   }) 
 
   app.get("/getNews" , async (req , res)=>{
-    const [rows] = db.query("SELECT * FROM news")
-    res.json({data:rows})
+    try{
+      const [rows] = await db.query("select n.* ,u.user_name from news n join user u on n.author_id = u.id;")
+      res.json({data:rows})
+    }
+    catch (error){
+       console.error('Error in /getEvents:', error.message);
+      res.status(500).json({ error: 'Query failed', details: error.message });
+    }
   })
 
   app.post("/Login" , async (req , res)=>{
@@ -116,7 +122,7 @@ app.delete("/DeleteNews" , async(req , res)=>{
   try{
     const {id} = req.body
     await db.query("Delete from news where id = ?",[id])
-    res.join({message:"news deleted"})
+    res.json({message:"news deleted"})
   }
   catch (error){
     console.error("error deleting news" , error)

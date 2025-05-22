@@ -38,7 +38,7 @@ export const ApiSlice = createApi({
                 method:"DELETE",
                 body:credentials
             }),
-            invalidatesTags : ["news"]
+            invalidatesTags : ["News"]
         })
     })
 })
@@ -47,4 +47,4 @@ export const ApiSlice = createApi({
 
 
 
-export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteEventMutation} = ApiSlice
+export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteNewsMutation, useDeleteEventMutation} = ApiSlice
