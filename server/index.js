@@ -130,6 +130,17 @@ app.delete("/DeleteNews" , async(req , res)=>{
   }
 
 })
+app.post("/Submission" , async(req , res)=>{
+  try{
+   const {user_id ,title , content} = req.body 
+   await db.query("insert into Submission (user_id , title , content) values (?,?,?);" , [user_id,title,content])
+   res.json({message:"submission complete"})
+  }
+  catch(error){
+    console.error("error submiting" , error)
+    res.status(500).json({error:"internal server error"})
+  }
+})  
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

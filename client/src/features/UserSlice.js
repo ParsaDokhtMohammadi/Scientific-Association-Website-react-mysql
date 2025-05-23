@@ -1,8 +1,8 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    CurrentUser: {user_name : "ali" , role : "admin"}
+    CurrentUser: {id:1,user_name : "ali" , role : "user"}
 }
 
 
@@ -12,6 +12,7 @@ const UserSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.CurrentUser = {
+                id : action.payload.id,
                 user_name: action.payload.user_name,
                 role: action.payload.role,
             };

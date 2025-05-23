@@ -18,7 +18,7 @@ const Login = () => {
     try {
       const response = await login({ user_name, password }).unwrap();
       console.log('Login successful:', response);
-      dispatch(setUser({user_name:response.user.user_name , role : response.user.role}))
+      dispatch(setUser({id:response.user.id,user_name:response.user.user_name , role : response.user.role}))
       navigate("/UserDashboard")
     } catch (err) {
       console.error('Login failed:', err);

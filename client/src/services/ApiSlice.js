@@ -39,6 +39,13 @@ export const ApiSlice = createApi({
                 body:credentials
             }),
             invalidatesTags : ["News"]
+        }),
+        Submit : builder.mutation({
+            query:(credentials)=>({
+                url: "Submission",
+                method:"POST",
+                body:credentials
+            })
         })
     })
 })
@@ -47,4 +54,4 @@ export const ApiSlice = createApi({
 
 
 
-export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteNewsMutation, useDeleteEventMutation} = ApiSlice
+export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteNewsMutation,useSubmitMutation, useDeleteEventMutation} = ApiSlice
