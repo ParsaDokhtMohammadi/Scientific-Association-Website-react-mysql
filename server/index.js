@@ -141,7 +141,19 @@ app.post("/Submission" , async(req , res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })  
-
+app.get("/UserSubmission", async (req, res) => {
+  const userId = req.query.id;
+  try {
+    const [rows] = await db.query(
+      "SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id WHERE s.user_id = ?",
+      [userId]
+    );
+    res.json({ data: rows });
+  } catch (error) {
+    console.error("Error fetching user submissions:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

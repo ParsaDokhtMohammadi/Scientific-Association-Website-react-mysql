@@ -7,7 +7,7 @@ export const ApiSlice = createApi({
         getEvents : builder.query({query: () => "/getEvents",providesTags: ['Events'],}),
         getUsers : builder.query({query:()=>"/getUsers"}),
         getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
-
+        getUserSubmissions: builder.query({query: (userId) => `/UserSubmission?id=${userId}`,}),
 
 
         Login : builder.mutation({
@@ -54,4 +54,4 @@ export const ApiSlice = createApi({
 
 
 
-export const {useGetEventsQuery , useGetNewsQuery , useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteNewsMutation,useSubmitMutation, useDeleteEventMutation} = ApiSlice
+export const {useGetEventsQuery , useGetNewsQuery ,useGetUserSubmissionsQuery,useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteNewsMutation,useSubmitMutation, useDeleteEventMutation} = ApiSlice
