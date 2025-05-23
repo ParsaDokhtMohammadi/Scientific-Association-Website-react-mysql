@@ -51,6 +51,14 @@ async function startServer() {
     const [rows] = await db.query("SELECT * FROM user")
     res.json({data:rows})
   }) 
+  app.get("/getAllSubmission", async (req , res)=>{
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id")
+    res.json({data:rows})
+  })
+  app.get("/getPendingSubmission", async (req , res)=>{
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id where s.status = 'pending'")
+    res.json({data:rows})
+  })
 
   app.get("/getNews" , async (req , res)=>{
     try{

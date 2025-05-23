@@ -6,6 +6,8 @@ export const ApiSlice = createApi({
     endpoints : (builder) => ({
         getEvents : builder.query({query: () => "/getEvents",providesTags: ['Events'],}),
         getUsers : builder.query({query:()=>"/getUsers"}),
+        getAllsubmissions :builder.query({query:()=>"/getAllSubmission"}) ,
+        getPendingsubmissions :builder.query({query:()=>"/getPendingSubmission"}) ,
         getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
         getUserSubmissions: builder.query({query: (userId) => `/UserSubmission?id=${userId}`,}),
 
@@ -54,4 +56,7 @@ export const ApiSlice = createApi({
 
 
 
-export const {useGetEventsQuery , useGetNewsQuery ,useGetUserSubmissionsQuery,useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation , useRegisterMutation , useDeleteNewsMutation,useSubmitMutation, useDeleteEventMutation} = ApiSlice
+export const {useGetEventsQuery , useGetNewsQuery ,useGetUserSubmissionsQuery,
+    useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation ,
+     useRegisterMutation , useDeleteNewsMutation,useSubmitMutation,
+      useDeleteEventMutation ,useGetPendingsubmissionsQuery,useGetAllsubmissionsQuery} = ApiSlice
