@@ -1,4 +1,5 @@
 import {createApi , fetchBaseQuery} from "@reduxjs/toolkit/query/react"
+
 export const ApiSlice = createApi({
     reducerPath:"DBApi",
     baseQuery : fetchBaseQuery({baseUrl:"http://localhost:5000"}),
@@ -6,11 +7,10 @@ export const ApiSlice = createApi({
     endpoints : (builder) => ({
         getEvents : builder.query({query: () => "/getEvents",providesTags: ['Events'],}),
         getUsers : builder.query({query:()=>"/getUsers"}),
-        getAllsubmissions :builder.query({query:()=>"/getAllSubmission"}) ,
-        getPendingsubmissions :builder.query({query:()=>"/getPendingSubmission"}) ,
+        getAllsubmissions :builder.query({query:()=>"/getAllSubmission" , providesTags:["AllSubmissions"]}) ,
+        getPendingsubmissions :builder.query({query:()=>"/getPendingSubmission",providesTags: ["PendingSubmissions"]}) ,
         getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
         getUserSubmissions: builder.query({query: (userId) => `/UserSubmission?id=${userId}`,}),
-
 
         Login : builder.mutation({
             query:(credentials) =>({
@@ -48,15 +48,30 @@ export const ApiSlice = createApi({
                 method:"POST",
                 body:credentials
             })
+        }),
+        approveSubmission : builder.mutation({
+            query: (id) => ({
+                url: "/ApproveSubmission",
+                method: "POST",
+                body: { id }
+            }),
+            invalidatesTags: ["PendingSubmissions","AllSubmissions"]
         })
     })
 })
 
-
-
-
-
-export const {useGetEventsQuery , useGetNewsQuery ,useGetUserSubmissionsQuery,
-    useGetUsersQuery ,useLazyGetUsersQuery , useLoginMutation ,
-     useRegisterMutation , useDeleteNewsMutation,useSubmitMutation,
-      useDeleteEventMutation ,useGetPendingsubmissionsQuery,useGetAllsubmissionsQuery} = ApiSlice
+export const {
+    useGetEventsQuery,
+    useGetNewsQuery,
+    useGetUserSubmissionsQuery,
+    useGetUsersQuery,
+    useLazyGetUsersQuery,
+    useLoginMutation,
+    useRegisterMutation,
+    useDeleteNewsMutation,
+    useSubmitMutation,
+    useDeleteEventMutation,
+    useGetPendingsubmissionsQuery,
+    useGetAllsubmissionsQuery,
+    useApproveSubmissionMutation
+} = ApiSlice

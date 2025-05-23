@@ -1,8 +1,9 @@
 import {useState} from 'react'
-import { useGetAllsubmissionsQuery , useGetPendingsubmissionsQuery} from '../services/ApiSlice'
+import { useGetAllsubmissionsQuery , useGetPendingsubmissionsQuery ,useApproveSubmissionMutation } from '../services/ApiSlice'
 const SubmissionAdmin = () => {
   const {data:AllSubmissions , isLoading , Error} = useGetAllsubmissionsQuery()
   const {data:PendingSubmissions} = useGetPendingsubmissionsQuery()
+  const [approveSubmission, {  isSuccess, isError }] = useApproveSubmissionMutation();
   const [view , SetView] = useState("pending")
   return (
     <>
@@ -41,7 +42,8 @@ const SubmissionAdmin = () => {
             <button className="lg:w-[86px] rounded h-9 px-2 flex justify-center m-auto items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer">details</button>
           </td>
           <td className='border py-2 px-2 max-w-[200px] truncate not-lg:hidden'>
-            <button className="lg:w-[86px] rounded h-9 px-2 flex justify-center m-auto items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer">approve</button>
+            <button className="lg:w-[86px] rounded h-9 px-2 flex justify-center m-auto items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer"
+            onClick={()=>approveSubmission(datum?.id)}>approve</button>
           </td>
           <td className='border py-2 px-2 max-w-[200px] truncate not-lg:hidden'>
             <button className="lg:w-[86px] rounded h-9 px-2 flex justify-center m-auto items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer">reject</button>
@@ -65,7 +67,7 @@ const SubmissionAdmin = () => {
       </tr>
     </thead>
     <tbody>
-      {PendingSubmissions?.data.map(datum => (
+      {AllSubmissions?.data.map(datum => (
         <tr key={datum.id}>
           <td className='border py-2 px-2 text-center max-w-[200px] truncate'>{datum?.title}</td>
           <td className='border py-2 px-2 text-center max-w-[200px] truncate'>{datum?.content}</td>

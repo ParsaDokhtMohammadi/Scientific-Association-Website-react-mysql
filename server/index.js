@@ -52,11 +52,11 @@ async function startServer() {
     res.json({data:rows})
   }) 
   app.get("/getAllSubmission", async (req , res)=>{
-    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id")
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id order by s.id")
     res.json({data:rows})
   })
   app.get("/getPendingSubmission", async (req , res)=>{
-    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id where s.status = 'pending'")
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id where s.status = 'pending' order by s.id")
     res.json({data:rows})
   })
 
@@ -162,6 +162,25 @@ app.get("/UserSubmission", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+app.post("/ApproveSubmission", async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const [submissionRows] = await db.query("SELECT * FROM submission WHERE id = ?", [id]);
+    const submission = submissionRows[0];
+    await db.query("UPDATE submission SET status = 'approved' WHERE id = ?", [id]);
+    await db.query(
+      "INSERT INTO news (title, content, author_id) VALUES (?, ?, ?)",
+      [submission.title, submission.content, submission.user_id]
+    );
+
+    res.json({ message: "Submission approved and added to news" });
+  } catch (error) {
+    console.error("Error approving submission:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
