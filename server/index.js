@@ -52,11 +52,11 @@ async function startServer() {
     res.json({data:rows})
   }) 
   app.get("/getAllSubmission", async (req , res)=>{
-    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id order by s.id")
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id order by s.created_at")
     res.json({data:rows})
   })
   app.get("/getPendingSubmission", async (req , res)=>{
-    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id where s.status = 'pending' order by s.id")
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id where s.status = 'pending' order by s.created_at")
     res.json({data:rows})
   })
 
@@ -180,6 +180,17 @@ app.post("/ApproveSubmission", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+app.post("/rejectSubmision" , async (req , res)=>{
+  const {id} = req.body
+  try{
+    await db.query("UPDATE submission SET status = 'rejected' where id = ?",[id])
+    res.json({message:"submission rejected"})
+  }
+  catch(error){
+    console.log("error rejecting",error)
+    res.status(500).json({error:"internal server error"})
+  }
+})
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
