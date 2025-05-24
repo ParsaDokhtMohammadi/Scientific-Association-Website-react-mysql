@@ -6,7 +6,8 @@ export const ApiSlice = createApi({
     tagTypes: ['Events'],
     endpoints : (builder) => ({
         getEvents : builder.query({query: () => "/getEvents",providesTags: ['Events'],}),
-        getUsers : builder.query({query:()=>"/getUsers"}),
+        getUsers : builder.query({query:()=>"/getUsers" , providesTags: ["Users"]}),
+        getAdminsMembers : builder.query({query:()=>"/getAdmins&members" , providesTags: ["Admins&Members"]}),
         getAllsubmissions :builder.query({query:()=>"/getAllSubmission" , providesTags:["AllSubmissions"]}) ,
         getPendingsubmissions :builder.query({query:()=>"/getPendingSubmission",providesTags: ["PendingSubmissions"]}) ,
         getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
@@ -64,6 +65,30 @@ export const ApiSlice = createApi({
                 body:{id}
             }),
             invalidatesTags : ["PendingSubmissions","AllSubmissions"]
+        }),
+        PromoteUser : builder.mutation({
+          query : (id)=>({
+            url : "/PromoteUser",
+            method:"POST",
+            body : {id}
+          })  ,
+          invalidatesTags : ["Users","Admins&Members"]
+        }),
+        DemoteUser : builder.mutation({
+          query : (id)=>({
+            url : "/DemoteUser",
+            method:"POST",
+            body : {id}
+          })  ,
+          invalidatesTags : ["Users","Admins&Members"]
+        }),
+        PromoteToAdmin : builder.mutation({
+          query : (id)=>({
+            url : "/PromoteToAdmin",
+            method:"POST",
+            body : {id}
+          })  ,
+          invalidatesTags : ["Users","Admins&Members"]
         })
     })
 })
@@ -82,5 +107,9 @@ export const {
     useGetPendingsubmissionsQuery,
     useGetAllsubmissionsQuery,
     useApproveSubmissionMutation,
-    useRejectSubmissionMutation
+    useRejectSubmissionMutation,
+    useDemoteUserMutation,
+    usePromoteToAdminMutation,
+    usePromoteUserMutation ,
+    useGetAdminsMembersQuery
 } = ApiSlice

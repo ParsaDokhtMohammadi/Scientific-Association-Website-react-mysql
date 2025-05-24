@@ -48,7 +48,11 @@ async function startServer() {
   });
 
   app.get("/getUsers" , async (req , res)=>{
-    const [rows] = await db.query("SELECT * FROM user")
+    const [rows] = await db.query("SELECT * FROM user order by id desc")
+    res.json({data:rows})
+  }) 
+  app.get("/getAdmins&members" , async (req , res)=>{
+    const [rows] = await db.query("SELECT * FROM user where role = 'member' or role = 'admin' order by id desc")
     res.json({data:rows})
   }) 
   app.get("/getAllSubmission", async (req , res)=>{
@@ -188,6 +192,39 @@ app.post("/rejectSubmision" , async (req , res)=>{
   }
   catch(error){
     console.log("error rejecting",error)
+    res.status(500).json({error:"internal server error"})
+  }
+})
+app.post("/PromoteUser" , async(req , res)=>{
+  const {id} = req.body
+  try{
+    await db.query("UPDATE user set role = 'member' where id = ?",[id])
+    res.json({message:"user Promoted to member"})
+  } 
+  catch(error){
+    console.log("error promoting user" , error)
+    res.status(500).json({error:"internal server error"})
+  }
+})
+app.post("/DemoteUser" , async(req , res)=>{
+  const {id} = req.body
+  try{
+    await db.query("UPDATE user set role = 'user' where id = ?",[id])
+    res.json({message:"user demoted"})
+  } 
+  catch(error){
+    console.log("error demoting user" , error)
+    res.status(500).json({error:"internal server error"})
+  }
+})
+app.post("/PromoteToAdmin" , async(req , res)=>{
+  const {id} = req.body
+  try{
+    await db.query("UPDATE user set role = 'admin' where id = ?",[id])
+    res.json({message:"user promoted to admin"})
+  } 
+  catch(error){
+    console.log("error promoting user" , error)
     res.status(500).json({error:"internal server error"})
   }
 })
