@@ -228,6 +228,26 @@ app.post("/PromoteToAdmin" , async(req , res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
+app.get("/GetEventComents" , async(req,res)=>{
+  const event_id = req.query.id
+  try{
+    const [rows] = await db.query("select C.* ,  U.user_name , E.title from comment_event C join user U on U.id = C.user_id join events E on C.event_id = E.id  where E.id = ?;", [event_id])
+    res.json({data:rows})
+  }
+  catch(error){
+
+  }
+})
+app.get("/GetNewsComents" , async(req,res)=>{
+  const news_id = req.query.id
+  try{
+    const [rows] = await db.query("select C.* ,  U.user_name , N.title from comment_event C join user U on U.id = C.user_id join news N on C.event_id = E.id  where N.id = ?;", [news_id])
+    res.json({data:rows})
+  }
+  catch(error){
+
+  }
+})
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

@@ -11,8 +11,9 @@ export const ApiSlice = createApi({
         getAllsubmissions :builder.query({query:()=>"/getAllSubmission" , providesTags:["AllSubmissions"]}) ,
         getPendingsubmissions :builder.query({query:()=>"/getPendingSubmission",providesTags: ["PendingSubmissions"]}) ,
         getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
-        getUserSubmissions: builder.query({query: (userId) => `/UserSubmission?id=${userId}`,}),
-
+        getUserSubmissions: builder.query({query: (userId) => `/UserSubmission?id=${userId}`}),
+        getEventComments : builder.query({query:(event_id)=>`/GetEventComents?id=${event_id}`}),
+        getNewsComments : builder.query({query:(News_id)=>`/GetEventComents?id=${News_id}`}),
         Login : builder.mutation({
             query:(credentials) =>({
                 url: "/Login",
@@ -111,5 +112,7 @@ export const {
     useDemoteUserMutation,
     usePromoteToAdminMutation,
     usePromoteUserMutation ,
-    useGetAdminsMembersQuery
+    useGetAdminsMembersQuery,
+    useGetEventCommentsQuery,
+    useGetNewsCommentsQuery
 } = ApiSlice

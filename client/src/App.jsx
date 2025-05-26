@@ -11,6 +11,7 @@ import News from "./pages/News"
 import Submission from "./pages/Submission";
 import UsersAdmin from "./pages/UsersAdmin";
 import SubmissionAdmin from "./pages/SubmissionAdmin";
+import SingleEvent from "./pages/SingleEvent";
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/Submission" element={<Submission></Submission>}></Route>
         <Route path="/UsersAdmin" element={<UsersAdmin></UsersAdmin>}></Route>
         <Route path="/SubmissionAdmin" element={<SubmissionAdmin></SubmissionAdmin>}></Route>
+        <Route path="/SingleEvent/:id" element={<SingleEvent></SingleEvent>}></Route>
      
       </Route>
     )

@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import DeletePopup from './DeletePopup'
+import { useNavigate } from 'react-router'
 
 const EventCard = ({Item , tag}) => {
+    const navigate = useNavigate()
     const User = useSelector(state => state.CurrentUser.CurrentUser) 
     const [showDeletePopup, setShowDeletePopup] = useState(false)
     console.log(Item)
@@ -14,7 +16,8 @@ const EventCard = ({Item , tag}) => {
                 <p className='h-[75px] line-clamp-3 px-2 text-[#A3A3A3]'>{tag==="Event" ? Item?.description : Item?.content}</p>
                 <span className='px-2 text-sm text-[#A3A3A3]'>{tag==="Event" ? `presented by ${Item?.presenter}` : `author : ${Item?.user_name}`}</span>
                 <div className='flex justify-between px-2 not-md:px-8'>
-                    <button className='rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]'>
+                    <button className='rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]'
+                    onClick={()=>navigate(`/SingleEvent/${Item?.id}`)}>
                         details
                     </button>
                     <button className={`rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]
