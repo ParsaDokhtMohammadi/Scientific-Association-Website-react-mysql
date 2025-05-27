@@ -9,14 +9,9 @@ const Comments = ({ event_id }) => {
     const [Comment, {error}] = useCommentOnEventMutation()
     const submit = async (e) => {
         e.preventDefault()
-        try{
             await Comment({user_id , event_id , content})
             alert("comment made")
             setContent("")
-        }
-        catch (error){
-            console.log("nah" , error)
-        }
     }
 
     return (

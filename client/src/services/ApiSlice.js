@@ -40,6 +40,9 @@ export const ApiSlice = createApi({
       query: (News_id) => `/GetNewsComments?id=${News_id}`,
       providesTags: ["NewsComments"],
     }),
+    getSingleEvent :builder.query({
+      query:(event_id)=>`/singleEventData?id=${event_id}`,
+    }) ,
     Login: builder.mutation({
       query: (credentials) => ({
         url: "/Login",
@@ -125,6 +128,7 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["eventComments"],
     }),
+
   }),
 });
 
@@ -133,7 +137,7 @@ export const {
   useGetNewsQuery,
   useGetUserSubmissionsQuery,
   useGetUsersQuery,
-  useLazyGetUsersQuery,
+  useGetSingleEventQuery,
   useLoginMutation,
   useRegisterMutation,
   useDeleteNewsMutation,

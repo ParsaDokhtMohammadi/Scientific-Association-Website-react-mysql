@@ -144,6 +144,16 @@ async function startServer() {
     await db.query("INSERT INTO comment_event (user_id, event_id, content) VALUES (?, ?, ?)", [user_id, event_id, content]);
     res.json({ message: "Comment added" });
   });
+  app.post("/CommentOnNews", async (req, res) => {
+    const { user_id, news_id, content } = req.body;
+    await db.query("INSERT INTO comment_news (user_id, news_id, content) VALUES (?, ?, ?)", [user_id, news_id, content]);
+    res.json({ message: "Comment added" });
+  });
+  app.get("/singleEventData" , async (req , res)=>{
+    const {id} = req.query
+    const [row] = await db.query("select * from Events where id = ? ;" ,[id])
+    res.json({data:row})
+  })
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
