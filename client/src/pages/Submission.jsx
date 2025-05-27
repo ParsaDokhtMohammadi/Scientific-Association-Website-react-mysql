@@ -11,14 +11,11 @@ const Submission = () => {
   console.log(userSubmissions)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
       await submit({ user_id, title, content }).unwrap();
       alert('Submission successful!');
       setTitle('');
       setContent('');
-    } catch (err) {
-      console.error('Submission failed:', err);
-    }
+  
   };
 
   return (

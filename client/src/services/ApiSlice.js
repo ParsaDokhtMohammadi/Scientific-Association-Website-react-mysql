@@ -12,8 +12,8 @@ export const ApiSlice = createApi({
         getPendingsubmissions :builder.query({query:()=>"/getPendingSubmission",providesTags: ["PendingSubmissions"]}) ,
         getNews : builder.query({query: ()=> "/getNews", providesTags:["News"]}),
         getUserSubmissions: builder.query({query: (userId) => `/UserSubmission?id=${userId}`}),
-        getEventComments : builder.query({query:(event_id)=>`/GetEventComents?id=${event_id}`}),
-        getNewsComments : builder.query({query:(News_id)=>`/GetEventComents?id=${News_id}`}),
+        getEventComments : builder.query({query:(event_id)=>`/GetEventComments?id=${event_id}` ,providesTags:["eventComments"]}),
+        getNewsComments : builder.query({query:(News_id)=>`/GetNewsComments?id=${News_id}` , providesTags:["NewsComments"]}),
         Login : builder.mutation({
             query:(credentials) =>({
                 url: "/Login",
@@ -90,6 +90,15 @@ export const ApiSlice = createApi({
             body : {id}
           })  ,
           invalidatesTags : ["Users","Admins&Members"]
+        }),
+        CommentOnEvent : builder.mutation({
+            query : (credentials)=>({
+                url:"/CommentOnEvent",
+                method:"POST",
+                body : credentials
+                
+            })
+            
         })
     })
 })
@@ -114,5 +123,6 @@ export const {
     usePromoteUserMutation ,
     useGetAdminsMembersQuery,
     useGetEventCommentsQuery,
-    useGetNewsCommentsQuery
+    useGetNewsCommentsQuery ,
+    useCommentOnEventMutation
 } = ApiSlice

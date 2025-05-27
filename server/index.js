@@ -228,7 +228,7 @@ app.post("/PromoteToAdmin" , async(req , res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
-app.get("/GetEventComents" , async(req,res)=>{
+app.get("/GetEventComments" , async(req,res)=>{
   const event_id = req.query.id
   try{
     const [rows] = await db.query("select C.* ,  U.user_name , E.title from comment_event C join user U on U.id = C.user_id join events E on C.event_id = E.id  where E.id = ?;", [event_id])
@@ -238,15 +238,28 @@ app.get("/GetEventComents" , async(req,res)=>{
 
   }
 })
-app.get("/GetNewsComents" , async(req,res)=>{
+app.get("/GetNewsComments" , async(req,res)=>{
   const news_id = req.query.id
   try{
-    const [rows] = await db.query("select C.* ,  U.user_name , N.title from comment_event C join user U on U.id = C.user_id join news N on C.event_id = E.id  where N.id = ?;", [news_id])
+    const [rows] = await db.query("select C.content , C.created_at ,  U.user_name , N.title from comment_event C join user U on U.id = C.user_id join news N on C.event_id = E.id  where N.id = ?;", [news_id])
     res.json({data:rows})
   }
   catch(error){
 
   }
+app.post("/CommentOnEvent" , async(req , res)=>{
+  const {user_id , event_id , content} = req.body
+   console.log('CommentOnEvent hit', req.body);
+  try{
+    await db.query("insert into comment_event(user_id , event_id , content) values (? , ? , ?)" , [user_id , event_id , content])
+    res.json({message:"comment made"})
+    console.log("we did it")
+  }
+  catch(error){
+    console.log('error commenting', error)
+    res.status(500).json({error:"internal server error"})
+  }
+})
 })
 
   const PORT = process.env.PORT || 5000;
