@@ -6,7 +6,6 @@ const Header = () => {
   const User = useSelector(state => state.CurrentUser.CurrentUser)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  console.log(User)
   return (
     <header className="w-full bg-[#3B82F6] flex justify-between items-center px-3  mb-8">
       <img src="assets/img/logo.png" className="w-[75px] " />
@@ -44,6 +43,15 @@ const Header = () => {
         }
         >
           Users
+        </NavLink>
+        <NavLink 
+          to="/UserRegistrations"
+          className={({ isActive }) =>
+            `duration-200 text-[#D1D5DB] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]
+            ${User?.role!=="user" ?"hidden":"block"}`
+        }
+        >
+          Registrations
         </NavLink>
       </nav>
           </div>

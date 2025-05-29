@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "DBApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
-  tagTypes: ["Events", "Users", "Admins&Members", "AllSubmissions", "PendingSubmissions", "News", "eventComments", "NewsComments"],
+  tagTypes: ["Events", "Users", "Admins&Members", "AllSubmissions", "PendingSubmissions", "News", "eventComments", "NewsComments" , "AllRegistrations" , "Registration","EventRegister"],
   endpoints: (builder) => ({
     getEvents: builder.query({
       query: () => "/getEvents",
@@ -42,9 +42,15 @@ export const ApiSlice = createApi({
     }),
     getSingleEvent: builder.query({
       query: (event_id) => `/singleEventData?id=${event_id}`,
+      providesTags : ["EventRegister"]
     }),
     getRegistration: builder.query({
-      query: (id) => `Registration?id=${id}`
+      query: (id) => `Registration?id=${id}`,
+      providesTags : ["Registration"]
+    }),
+    getAllRegistration:builder.query({
+      query:(id)=>`/AllRegistration?id=${id}`,
+      providesTags : ["AllRegistrations"]
     }),
     Login: builder.mutation({
       query: (credentials) => ({
@@ -133,18 +139,20 @@ export const ApiSlice = createApi({
     }),
     registerUserForEvent: builder.mutation({
       query: (credentials) => ({
-        url: '/registerForEvent',    // correct endpoint
+        url: '/registerForEvent',   
         method: 'POST',
         body: credentials,
       }),
+      invalidatesTags : ["Registration" , "AllRegistrations","EventRegister"]
     }),
 
     unregisterUserFromEvent: builder.mutation({
       query: (credentials) => ({
-        url: '/unRegister',          // correct endpoint
+        url: '/unRegister',          
         method: 'POST',
         body: credentials,
       }),
+      invalidatesTags : ["Registration", "AllRegistrations","EventRegister"]
     }),
 
   }),
@@ -174,5 +182,6 @@ export const {
   useCommentOnEventMutation,
   useRegisterUserForEventMutation,
   useUnregisterUserFromEventMutation,
-  useGetRegistrationQuery
+  useGetRegistrationQuery,
+  useGetAllRegistrationQuery
 } = ApiSlice;

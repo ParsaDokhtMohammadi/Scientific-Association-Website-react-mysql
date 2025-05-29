@@ -10,7 +10,6 @@ const Comments = ({ event_id }) => {
     const submit = async (e) => {
         e.preventDefault()
             await Comment({user_id , event_id , content})
-            alert("comment made")
             setContent("")
     }
 

@@ -75,6 +75,11 @@ async function startServer() {
     const [rows] = await db.query("SELECT * FROM event_registration WHERE user_id = ?", [id]);
     res.json({ data: rows });
   });
+  app.get("/AllRegistration" , async (req,res)=>{
+    const {id} = req.query
+    const [rows] = await db.query("select * from events e left join event_registration er on e.id = er.event_id where er.user_id = ?",[id])
+    res.json({data:rows})
+  })
 
   app.post("/registerForEvent", async (req, res) => {
     const { event_id, user_id } = req.body;
