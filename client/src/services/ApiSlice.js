@@ -44,6 +44,9 @@ export const ApiSlice = createApi({
       query: (event_id) => `/singleEventData?id=${event_id}`,
       providesTags : ["EventRegister"]
     }),
+    getSingleNews : builder.query({
+      query: (id) => `/singleNewsData?id=${id}`
+    }),
     getRegistration: builder.query({
       query: (id) => `Registration?id=${id}`,
       providesTags : ["Registration"]
@@ -183,5 +186,6 @@ export const {
   useRegisterUserForEventMutation,
   useUnregisterUserFromEventMutation,
   useGetRegistrationQuery,
-  useGetAllRegistrationQuery
+  useGetAllRegistrationQuery,
+  useGetSingleNewsQuery
 } = ApiSlice;

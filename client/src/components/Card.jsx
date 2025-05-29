@@ -17,7 +17,7 @@ const EventCard = ({Item , tag}) => {
                 <span className='px-2 text-sm text-[#A3A3A3]'>{tag==="Event" ? `presented by ${Item?.presenter}` : `author : ${Item?.user_name}`}</span>
                 <div className='flex justify-between px-2 not-md:px-8'>
                     <button className='rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]'
-                    onClick={()=>navigate(`/SingleEvent/${Item?.id}`)}>
+                    onClick={tag==="Event" ?()=>navigate(`/SingleEvent/${Item?.id}`):()=>navigate(`/SingleNews/${Item?.id}`)}>
                         details
                     </button>
                     <button className={`rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]

@@ -32,6 +32,11 @@ async function startServer() {
     const [row] = await db.query("SELECT * FROM events WHERE id = ?", [id]);
     res.json({ data: row });
   });
+  app.get("/singleNewsData", async (req , res)=>{
+    const {id} = req.query
+    const [rows] = await db.query("select n.* , u.user_name from news n join user u on u.id = n.author_id where n.id = ?" , [id])
+    res.json({data:rows})
+  })
 
   app.delete("/DeleteEvent", async (req, res) => {
     const { id } = req.body;
