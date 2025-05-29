@@ -140,6 +140,14 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["eventComments"],
     }),
+    CommentOnNews : builder.mutation({
+      query : (credentials) => ({
+        url : "/CommentOnNews",
+        method:"POST",
+        body : credentials
+      }),
+      invalidatesTags : ["NewsComments"]
+    }),
     registerUserForEvent: builder.mutation({
       query: (credentials) => ({
         url: '/registerForEvent',   
@@ -187,5 +195,6 @@ export const {
   useUnregisterUserFromEventMutation,
   useGetRegistrationQuery,
   useGetAllRegistrationQuery,
-  useGetSingleNewsQuery
+  useGetSingleNewsQuery,
+  useCommentOnNewsMutation
 } = ApiSlice;

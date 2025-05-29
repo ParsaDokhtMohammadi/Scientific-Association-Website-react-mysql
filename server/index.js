@@ -186,7 +186,7 @@ async function startServer() {
 
   app.get("/GetNewsComments", async (req, res) => {
     const { id } = req.query;
-    const [rows] = await db.query("SELECT C.content, C.created_at, U.user_name, N.title FROM comment_event C JOIN user U ON C.user_id = U.id JOIN news N ON C.event_id = N.id WHERE N.id = ?", [id]);
+    const [rows] = await db.query("SELECT c.*, u.user_name FROM comment_news c JOIN user u ON u.id = c.user_id WHERE c.news_id = ?;", [id]);
     res.json({ data: rows });
   });
 
@@ -198,6 +198,7 @@ async function startServer() {
 
   app.post("/CommentOnNews", async (req, res) => {
     const { user_id, news_id, content } = req.body;
+    console.log(user_id , news_id , content)
     await db.query("INSERT INTO comment_news (user_id, news_id, content) VALUES (?, ?, ?)", [user_id, news_id, content]);
     res.json({ message: "Comment added" });
   });

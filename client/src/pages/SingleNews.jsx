@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { useGetSingleNewsQuery } from "../services/ApiSlice"; 
 import { useSelector } from "react-redux";
+import CommentsNews from "../components/CommentsNews";
 
 const SingleNews = () => {
   const { id } = useParams();
@@ -32,6 +33,10 @@ const SingleNews = () => {
           </p>
           <p className="text-md text-[#C4C4C4] leading-relaxed">{newsData?.content}</p>
         </div>
+      </div>
+      <div className="bg-[#2A2A2A] shadow-md p-6 rounded-lg">
+        <h2 className="text-2xl font-semibold text-[#06B6D4] mb-4">Comments</h2>
+        <CommentsNews id={id} />
       </div>
     </div>
   );
