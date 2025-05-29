@@ -40,9 +40,12 @@ export const ApiSlice = createApi({
       query: (News_id) => `/GetNewsComments?id=${News_id}`,
       providesTags: ["NewsComments"],
     }),
-    getSingleEvent :builder.query({
-      query:(event_id)=>`/singleEventData?id=${event_id}`,
-    }) ,
+    getSingleEvent: builder.query({
+      query: (event_id) => `/singleEventData?id=${event_id}`,
+    }),
+    getRegistration: builder.query({
+      query: (id) => `Registration?id=${id}`
+    }),
     Login: builder.mutation({
       query: (credentials) => ({
         url: "/Login",
@@ -128,6 +131,21 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["eventComments"],
     }),
+    registerUserForEvent: builder.mutation({
+      query: (credentials) => ({
+        url: '/registerForEvent',    // correct endpoint
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+
+    unregisterUserFromEvent: builder.mutation({
+      query: (credentials) => ({
+        url: '/unRegister',          // correct endpoint
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
 
   }),
 });
@@ -154,4 +172,7 @@ export const {
   useGetEventCommentsQuery,
   useGetNewsCommentsQuery,
   useCommentOnEventMutation,
+  useRegisterUserForEventMutation,
+  useUnregisterUserFromEventMutation,
+  useGetRegistrationQuery
 } = ApiSlice;

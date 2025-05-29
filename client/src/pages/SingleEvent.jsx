@@ -1,20 +1,40 @@
 import React from "react";
 import Comments from "../components/Comments";
 import { useParams } from "react-router";
-import { useGetSingleEventQuery } from "../services/ApiSlice";
+import {
+  useGetSingleEventQuery,
+  useRegisterUserForEventMutation,
+  useUnregisterUserFromEventMutation,
+  useGetRegistrationQuery
+} from "../services/ApiSlice";
+import { useSelector } from "react-redux";
 
 const SingleEvent = () => {
+  const User = useSelector(state => state.CurrentUser.CurrentUser);
+  const user_id = User.id;
   const { id } = useParams();
-  const { data: event, isLoading, error } = useGetSingleEventQuery(id);
+  const event_id = parseInt(id);
 
-  if (isLoading)
-    return <div className="text-[#06B6D4] font-medium">Loading...</div>;
-  if (error)
-    return (
-      <div className="text-[#EF4444] font-medium">
-        Error loading event data.
-      </div>
-    );
+  const { data: event, isLoading, error, refetch: refetchEvent } = useGetSingleEventQuery(id);
+  const [Register] = useRegisterUserForEventMutation();
+  const [unRegister] = useUnregisterUserFromEventMutation();
+  const { data: UserRegistration, refetch: refetchRegistration } = useGetRegistrationQuery(User.id);
+
+  const checkRegistration = () => {
+    return UserRegistration?.data.find(item => item.event_id == id);
+  };
+
+  const handleClick = async () => {
+      if (checkRegistration() === undefined) {
+        await Register({ event_id, user_id });
+      } else {
+        await unRegister({ event_id, user_id });
+      }
+      await Promise.all([refetchEvent(), refetchRegistration()]);
+  };
+
+  if (isLoading) return <div className="text-[#06B6D4] font-medium">Loading...</div>;
+  if (error) return <div className="text-[#EF4444] font-medium">Error loading event data.</div>;
 
   return (
     <div className="p-6 md:p-10 flex flex-col gap-10 bg-[#1A1A1A] text-[#F5F5F5] rounded-lg shadow-lg max-w-5xl mx-auto">
@@ -47,8 +67,12 @@ const SingleEvent = () => {
           <p className="text-md text-[#C4C4C4] leading-relaxed">
             {event?.data[0].description}
           </p>
-          <button className="bg-[#06B6D4] text-[#1A1A1A] font-bold py-2 px-4 rounded-md hover:bg-[#0891B2] transition-colors duration-200">
-            register
+          <button
+            className="bg-[#06B6D4] text-[#1A1A1A] font-bold py-2 px-4 rounded-md hover:bg-[#0891B2] transition-colors duration-200"
+            onClick={handleClick}
+             disabled={event?.data[0].capacity === 0 && checkRegistration() === undefined}
+          >
+            {checkRegistration() === undefined ? "Register" : "Unregister"}
           </button>
         </div>
       </div>

@@ -21,11 +21,25 @@ async function initializeDatabase() {
 async function startServer() {
   const db = await initializeDatabase();
 
+  // Event Queries
   app.get("/getEvents", async (req, res) => {
     const [rows] = await db.query("SELECT * FROM events");
     res.json({ data: rows });
   });
 
+  app.get("/singleEventData", async (req, res) => {
+    const { id } = req.query;
+    const [row] = await db.query("SELECT * FROM events WHERE id = ?", [id]);
+    res.json({ data: row });
+  });
+
+  app.delete("/DeleteEvent", async (req, res) => {
+    const { id } = req.body;
+    await db.query("DELETE FROM events WHERE id = ?", [id]);
+    res.json({ message: "Event deleted" });
+  });
+
+  // User Queries
   app.get("/getUsers", async (req, res) => {
     const [rows] = await db.query("SELECT * FROM user ORDER BY id DESC");
     res.json({ data: rows });
@@ -33,21 +47,6 @@ async function startServer() {
 
   app.get("/getAdmins&members", async (req, res) => {
     const [rows] = await db.query("SELECT * FROM user WHERE role IN ('member', 'admin') ORDER BY id DESC");
-    res.json({ data: rows });
-  });
-
-  app.get("/getAllSubmission", async (req, res) => {
-    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id ORDER BY s.created_at");
-    res.json({ data: rows });
-  });
-
-  app.get("/getPendingSubmission", async (req, res) => {
-    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id WHERE s.status = 'pending' ORDER BY s.created_at");
-    res.json({ data: rows });
-  });
-
-  app.get("/getNews", async (req, res) => {
-    const [rows] = await db.query("SELECT n.*, u.user_name FROM news n JOIN user u ON n.author_id = u.id");
     res.json({ data: rows });
   });
 
@@ -70,16 +69,44 @@ async function startServer() {
     res.json({ message: "Registration successful" });
   });
 
-  app.delete("/DeleteEvent", async (req, res) => {
-    const { id } = req.body;
-    await db.query("DELETE FROM events WHERE id = ?", [id]);
-    res.json({ message: "Event deleted" });
+  // Registration & Capacity Handling
+  app.get("/Registration", async (req, res) => {
+    const { id } = req.query;
+    const [rows] = await db.query("SELECT * FROM event_registration WHERE user_id = ?", [id]);
+    res.json({ data: rows });
   });
 
-  app.delete("/DeleteNews", async (req, res) => {
-    const { id } = req.body;
-    await db.query("DELETE FROM news WHERE id = ?", [id]);
-    res.json({ message: "News deleted" });
+  app.post("/registerForEvent", async (req, res) => {
+    const { event_id, user_id } = req.body;
+    try {
+      await db.query("CALL RegisterUserForEvent(?, ?)", [event_id, user_id]);
+      res.json({ message: "Registration successful" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Registration failed" });
+    }
+  });
+
+  app.post("/unRegister", async (req, res) => {
+    const { event_id, user_id } = req.body;
+    try {
+      await db.query("CALL UnregisterUserFromEvent(?, ?)", [event_id, user_id]);
+      res.json({ message: "Unregistration successful" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Unregistration failed" });
+    }
+  });
+
+  // Submission & Approval Flow
+  app.get("/getAllSubmission", async (req, res) => {
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id ORDER BY s.created_at");
+    res.json({ data: rows });
+  });
+
+  app.get("/getPendingSubmission", async (req, res) => {
+    const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id WHERE s.status = 'pending' ORDER BY s.created_at");
+    res.json({ data: rows });
   });
 
   app.post("/Submission", async (req, res) => {
@@ -109,6 +136,19 @@ async function startServer() {
     res.json({ message: "Submission rejected" });
   });
 
+  // News Management
+  app.get("/getNews", async (req, res) => {
+    const [rows] = await db.query("SELECT n.*, u.user_name FROM news n JOIN user u ON n.author_id = u.id");
+    res.json({ data: rows });
+  });
+
+  app.delete("/DeleteNews", async (req, res) => {
+    const { id } = req.body;
+    await db.query("DELETE FROM news WHERE id = ?", [id]);
+    res.json({ message: "News deleted" });
+  });
+
+  // User Role Management
   app.post("/PromoteUser", async (req, res) => {
     const { id } = req.body;
     await db.query("UPDATE user SET role = 'member' WHERE id = ?", [id]);
@@ -127,6 +167,7 @@ async function startServer() {
     res.json({ message: "User promoted to admin" });
   });
 
+  // Comments
   app.get("/GetEventComments", async (req, res) => {
     const { id } = req.query;
     const [rows] = await db.query("SELECT C.*, U.user_name, E.title FROM comment_event C JOIN user U ON C.user_id = U.id JOIN events E ON C.event_id = E.id WHERE E.id = ?", [id]);
@@ -144,16 +185,12 @@ async function startServer() {
     await db.query("INSERT INTO comment_event (user_id, event_id, content) VALUES (?, ?, ?)", [user_id, event_id, content]);
     res.json({ message: "Comment added" });
   });
+
   app.post("/CommentOnNews", async (req, res) => {
     const { user_id, news_id, content } = req.body;
     await db.query("INSERT INTO comment_news (user_id, news_id, content) VALUES (?, ?, ?)", [user_id, news_id, content]);
     res.json({ message: "Comment added" });
   });
-  app.get("/singleEventData" , async (req , res)=>{
-    const {id} = req.query
-    const [row] = await db.query("select * from Events where id = ? ;" ,[id])
-    res.json({data:row})
-  })
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
