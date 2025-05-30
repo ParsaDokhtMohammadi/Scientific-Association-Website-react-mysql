@@ -21,7 +21,8 @@ const EventCard = ({Item , tag}) => {
                         details
                     </button>
                     <button className={`rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]
-                        ${User?.role !== "admin" ? "hidden" : "block"}`}>
+                        ${User?.role !== "admin" ? "hidden" : "block"}`}
+                        onClick={tag==="Event" ? ()=>navigate(`/EditEventForm/${Item?.id}`) :()=>navigate(`/EditNewsForm/${Item?.id}`) }>
                         edit
                     </button>
                     <button className={`rounded h-9 px-5 flex justify-center items-center duration-200 bg-[#06B6D4] hover:bg-[#0891B2] cursor-pointer min-w-[86px]

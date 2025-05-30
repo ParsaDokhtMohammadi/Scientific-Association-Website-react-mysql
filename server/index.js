@@ -211,6 +211,34 @@ async function startServer() {
     await db.query("DELETE from comment_news where id = ?" , [id])
     res.json({message:"comment deleted"})
   })
+  app.put("/EditEvent", async (req, res) => {
+    const { id, title, description, date, capacity, presenter, img_path } = req.body;
+
+    try {
+        await db.query(
+            "UPDATE events SET title = ?, description = ?, date = ?, capacity = ?, presenter = ?, img_path = ? WHERE id = ?",
+            [title, description, date, capacity, presenter, img_path, id]
+        );
+        res.json({ message: "Event updated successfully" });
+    } catch (error) {
+        console.error("Error updating event:", error);
+        res.status(500).json({ message: "Error updating event" });
+    }
+});
+app.put("/EditNews", async (req, res) => {
+    const { id, title, content, img_path } = req.body;
+
+    try {
+        await db.query(
+            "UPDATE news SET title = ?, content = ?, img_path = ? WHERE id = ?",
+            [title, content, img_path, id]
+        );
+        res.json({ message: "News updated successfully" });
+    } catch (error) {
+        console.error("Error updating news:", error);
+        res.status(500).json({ message: "Error updating news" });
+    }
+});
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

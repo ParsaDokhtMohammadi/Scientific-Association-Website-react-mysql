@@ -181,7 +181,22 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags : ["Registration", "AllRegistrations","EventRegister"]
     }),
-
+    editEvent: builder.mutation({
+    query: (updatedEvent) => ({
+        url: "/EditEvent",
+        method: "PUT",
+        body: updatedEvent
+    }),
+    invalidatesTags: ["Events"],
+}),
+editNews: builder.mutation({
+    query: (updatedNews) => ({
+        url: "/EditNews",
+        method: "PUT",
+        body: updatedNews
+    }),
+    invalidatesTags: ["News"],
+}),
   }),
 });
 
@@ -214,5 +229,7 @@ export const {
   useGetSingleNewsQuery,
   useCommentOnNewsMutation,
   useDeleteEventCommentMutation,
-  useDeleteNewsCommentMutation
+  useDeleteNewsCommentMutation,
+  useEditEventMutation,
+  useEditNewsMutation
 } = ApiSlice;

@@ -14,6 +14,8 @@ import SubmissionAdmin from "./pages/SubmissionAdmin";
 import SingleEvent from "./pages/SingleEvent";
 import UserRegistrations from "./pages/UserRegistrations";
 import SingleNews from "./pages/SingleNews";
+import EditEventForm from "./pages/EditEventForm";
+import EditNewsForm from "./pages/EditNewsForm";
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -29,6 +31,8 @@ const App = () => {
         <Route path="/SingleEvent/:id" element={<SingleEvent></SingleEvent>}></Route>
         <Route path="/SingleNews/:id" element={<SingleNews></SingleNews>}></Route>
         <Route path="/UserRegistrations" element={<UserRegistrations></UserRegistrations>}></Route>
+        <Route path="/EditEventForm/:id" element={<EditEventForm></EditEventForm>}></Route>
+        <Route path="/EditNewsForm/:id" element={<EditNewsForm></EditNewsForm>}></Route>
      
       </Route>
     )
