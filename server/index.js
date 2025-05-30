@@ -198,10 +198,19 @@ async function startServer() {
 
   app.post("/CommentOnNews", async (req, res) => {
     const { user_id, news_id, content } = req.body;
-    console.log(user_id , news_id , content)
     await db.query("INSERT INTO comment_news (user_id, news_id, content) VALUES (?, ?, ?)", [user_id, news_id, content]);
     res.json({ message: "Comment added" });
   });
+  app.delete("/DeleteEventComment" , async (req,res)=>{
+    const {id} = req.query
+    await db.query("DELETE from comment_event where id = ?" , [id])
+    res.json({message:"comment deleted"})
+  })
+  app.delete("/DeleteNewsComment" , async (req,res)=>{
+    const {id} = req.query
+    await db.query("DELETE from comment_news where id = ?" , [id])
+    res.json({message:"comment deleted"})
+  })
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

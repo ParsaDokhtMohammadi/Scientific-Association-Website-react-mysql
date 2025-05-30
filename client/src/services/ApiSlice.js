@@ -140,6 +140,22 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["eventComments"],
     }),
+    DeleteEventComment : builder.mutation({
+      query : (id) =>({
+        url : `DeleteEventComment?id=${id}`,
+        method : "DELETE",
+        body : {id}
+      }),
+      invalidatesTags : ["eventComments"]
+    }),
+    DeleteNewsComment : builder.mutation({
+      query : (id) =>({
+        url : `DeleteNewsComment?id=${id}`,
+        method : "DELETE",
+        body : {id}
+      }),
+      invalidatesTags : ["NewsComments"]
+    }),
     CommentOnNews : builder.mutation({
       query : (credentials) => ({
         url : "/CommentOnNews",
@@ -196,5 +212,7 @@ export const {
   useGetRegistrationQuery,
   useGetAllRegistrationQuery,
   useGetSingleNewsQuery,
-  useCommentOnNewsMutation
+  useCommentOnNewsMutation,
+  useDeleteEventCommentMutation,
+  useDeleteNewsCommentMutation
 } = ApiSlice;

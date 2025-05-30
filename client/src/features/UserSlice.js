@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    CurrentUser: {id:3,user_name : "ali" , role : "user"}
+    CurrentUser: {id:3,user_name : "ali" , role : "admin"}
 }
 
 
