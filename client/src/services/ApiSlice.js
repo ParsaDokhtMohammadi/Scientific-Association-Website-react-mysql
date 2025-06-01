@@ -25,6 +25,10 @@ export const ApiSlice = createApi({
       query: () => "/getPendingSubmission",
       providesTags: ["PendingSubmissions"],
     }),
+    getSubmissionById: builder.query({
+      query: (id) => `/GetSubmissionById?id=${id}`,
+      providesTags: ['Submissions'],
+    }),
     getNews: builder.query({
       query: () => "/getNews",
       providesTags: ["News"],
@@ -98,7 +102,7 @@ export const ApiSlice = createApi({
         method: "POST",
         body: { id },
       }),
-      invalidatesTags: ["PendingSubmissions", "AllSubmissions"],
+      invalidatesTags: ["PendingSubmissions", "AllSubmissions","Submissions"],
     }),
     rejectSubmission: builder.mutation({
       query: (id) => ({
@@ -106,7 +110,7 @@ export const ApiSlice = createApi({
         method: "POST",
         body: { id },
       }),
-      invalidatesTags: ["PendingSubmissions", "AllSubmissions"],
+      invalidatesTags: ["PendingSubmissions", "AllSubmissions","Submissions"],
     }),
     createEvent: builder.mutation({
       query: (newEvent) => ({
@@ -257,5 +261,6 @@ export const {
   useEditNewsMutation,
   useCreateEventMutation,
   useGetUserQuery,
-  useUpdateUserMutation
+  useUpdateUserMutation,
+  useGetSubmissionByIdQuery 
 } = ApiSlice;

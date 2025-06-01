@@ -157,7 +157,18 @@ async function startServer() {
     await db.query("UPDATE submission SET status = 'rejected' WHERE id = ?", [id]);
     res.json({ message: "Submission rejected" });
   });
+  app.get("/GetSubmissionById", async (req, res) => {
+    const { id } = req.query;
+    if (!id) return res.status(400).json({ message: "Missing submission ID" });
 
+    try {
+        const [rows] = await db.query('SELECT s.*, u.user_name FROM submission s JOIN user u ON u.id = s.user_id WHERE s.id = ?',[id]);
+        res.json({ data: rows[0] });
+    } catch (error) {
+        console.error("Error fetching submission by ID:", error);
+        res.status(500).json({ message: "Error fetching submission" });
+    }
+});
   // News Management
   app.get("/getNews", async (req, res) => {
     const [rows] = await db.query("SELECT n.*, u.user_name FROM news n JOIN user u ON n.author_id = u.id");
