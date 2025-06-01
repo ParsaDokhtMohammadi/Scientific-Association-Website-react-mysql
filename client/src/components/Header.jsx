@@ -1,67 +1,84 @@
-import { Link, NavLink , useNavigate } from "react-router";
-import { useSelector , useDispatch} from "react-redux";
+import { Link, NavLink, useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../features/UserSlice";
 
 const Header = () => {
-  const User = useSelector(state => state.CurrentUser.CurrentUser)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const User = useSelector(state => state.CurrentUser.CurrentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
-    <header className="w-full bg-[#3B82F6] flex justify-between items-center px-3  mb-8">
-      <img src="assets/img/logo.png" className="w-[75px] " />
-      <div className="flex ">
-      <nav className="flex flex-row items-center gap-3">
+    <header className="w-full bg-[#1A1A1A] flex justify-between items-center px-4 py-3 mb-8 shadow-lg">
+      <img src="assets/img/logo.png" className="w-[75px]" alt="Logo" />
+      <nav className="flex flex-row items-center gap-6">
         <NavLink
           to="/Events"
           className={({ isActive }) =>
-            `duration-200 text-[#D1D5DB] ${isActive ? "text-[#D1D5DB]" : ""} hover:text-[#F87171] `
-        }
+            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+          }
         >
           Events
         </NavLink>
         <NavLink
           to="/News"
           className={({ isActive }) =>
-            `duration-200 text-[#D1D5DB] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
-        }
+            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+          }
         >
           News
         </NavLink>
         <NavLink
-          to={`${User?.role === "admin" ? "/SubmissionAdmin" :"/Submission"}`}
+          to={`${User?.role === "admin" ? "/SubmissionAdmin" : "/Submission"}`}
           className={({ isActive }) =>
-            `duration-200 text-[#D1D5DB] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
-        }
+            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+          }
         >
           Submissions
         </NavLink>
-        <NavLink 
-          to="/UsersAdmin"
-          className={({ isActive }) =>
-            `duration-200 text-[#D1D5DB] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]
-            ${User?.role!=="admin" ?"hidden":"block"}`
-        }
-        >
-          Users
-        </NavLink>
-        <NavLink 
-          to="/UserRegistrations"
-          className={({ isActive }) =>
-            `duration-200 text-[#D1D5DB] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]
-            ${User?.role!=="user" ?"hidden":"block"}`
-        }
-        >
-          Registrations
-        </NavLink>
+        {User?.role === "admin" && (
+          <NavLink
+            to="/UsersAdmin"
+            className={({ isActive }) =>
+              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+            }
+          >
+            Users
+          </NavLink>
+        )}
+        {User?.role === "user" && (
+          <NavLink
+            to="/UserRegistrations"
+            className={({ isActive }) =>
+              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+            }
+          >
+            Registrations
+          </NavLink>
+        )}
+        {User && (
+          <NavLink
+            to="/EditUserProfile"
+            className={({ isActive }) =>
+              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+            }
+          >
+            Edit Profile
+          </NavLink>
+        )}
       </nav>
-          </div>
-          <div className="flex gap-2">
-            <button className="rounded  h-10  px-2 bg-[#06B6D4] flex justify-center items-center duration-200 hover:bg-[#F87171] cursor-pointer"
-            onClick={()=>{
-              dispatch(clearUser())
-              navigate("/")
-            }} >logout</button>
-          </div>
+      <div className="flex gap-2">
+        {User && (
+          <button
+            className="rounded h-10 px-4 bg-[#06B6D4] text-[#1A1A1A] font-bold hover:bg-[#F87171] transition-colors duration-200"
+            onClick={() => {
+              dispatch(clearUser());
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
+        )}
+      </div>
     </header>
   );
 };

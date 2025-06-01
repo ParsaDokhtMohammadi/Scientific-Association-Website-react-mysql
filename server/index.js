@@ -251,6 +251,32 @@ app.put("/EditNews", async (req, res) => {
         res.status(500).json({ message: "Error updating news" });
     }
 });
+app.put("/updateUser", async (req, res) => {
+  const { user_name, email, password } = req.body;
+  const { id } = req.query;
+  try {
+    await db.query(
+      "UPDATE user SET user_name = ?, email = ?, password = ? WHERE id = ?",
+      [user_name, email, password, id]
+    );
+    res.json({ message: "Profile updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating profile" });
+  }
+});
+
+app.get("/getUser", async (req, res) => {
+  const { id } = req.query;
+  if (!id) return res.status(400).json({ message: "Missing user ID" });
+  try {
+    const [user] = await db.query("SELECT id, email, user_name, role, created_at FROM user WHERE id = ?", [id]);
+    res.json({ data: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching user" });
+  }
+});
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

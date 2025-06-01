@@ -108,14 +108,14 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["PendingSubmissions", "AllSubmissions"],
     }),
-        createEvent: builder.mutation({
-            query: (newEvent) => ({
-                url: "/CreateEvent",
-                method: "POST",
-                body: newEvent
-            }),
-            invalidatesTags: ["Events"]
-        }),
+    createEvent: builder.mutation({
+      query: (newEvent) => ({
+        url: "/CreateEvent",
+        method: "POST",
+        body: newEvent
+      }),
+      invalidatesTags: ["Events"]
+    }),
     PromoteUser: builder.mutation({
       query: (id) => ({
         url: "/PromoteUser",
@@ -205,8 +205,22 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["News"],
     }),
+    updateUser: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/updateUser?id=${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ["CurrentUser"],
+    }),
+
+    getUser: builder.query({
+      query: (id) => `/getUser?id=${id}`,
+      providesTags: ["CurrentUser"],
+    }),
   }),
-  
+
+
 });
 
 export const {
@@ -241,5 +255,7 @@ export const {
   useDeleteNewsCommentMutation,
   useEditEventMutation,
   useEditNewsMutation,
-  useCreateEventMutation
+  useCreateEventMutation,
+  useGetUserQuery,
+  useUpdateUserMutation
 } = ApiSlice;
