@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "DBApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
-  tagTypes: ["Events", "Users", "Admins&Members", "AllSubmissions", "PendingSubmissions", "News", "eventComments", "NewsComments" , "AllRegistrations" , "Registration","EventRegister"],
+  tagTypes: ["Events", "Users", "Admins&Members", "AllSubmissions", "PendingSubmissions", "News", "eventComments", "NewsComments", "AllRegistrations", "Registration", "EventRegister"],
   endpoints: (builder) => ({
     getEvents: builder.query({
       query: () => "/getEvents",
@@ -42,18 +42,18 @@ export const ApiSlice = createApi({
     }),
     getSingleEvent: builder.query({
       query: (event_id) => `/singleEventData?id=${event_id}`,
-      providesTags : ["EventRegister"]
+      providesTags: ["EventRegister"]
     }),
-    getSingleNews : builder.query({
+    getSingleNews: builder.query({
       query: (id) => `/singleNewsData?id=${id}`
     }),
     getRegistration: builder.query({
       query: (id) => `Registration?id=${id}`,
-      providesTags : ["Registration"]
+      providesTags: ["Registration"]
     }),
-    getAllRegistration:builder.query({
-      query:(id)=>`/AllRegistration?id=${id}`,
-      providesTags : ["AllRegistrations"]
+    getAllRegistration: builder.query({
+      query: (id) => `/AllRegistration?id=${id}`,
+      providesTags: ["AllRegistrations"]
     }),
     Login: builder.mutation({
       query: (credentials) => ({
@@ -108,6 +108,14 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["PendingSubmissions", "AllSubmissions"],
     }),
+        createEvent: builder.mutation({
+            query: (newEvent) => ({
+                url: "/CreateEvent",
+                method: "POST",
+                body: newEvent
+            }),
+            invalidatesTags: ["Events"]
+        }),
     PromoteUser: builder.mutation({
       query: (id) => ({
         url: "/PromoteUser",
@@ -140,64 +148,65 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["eventComments"],
     }),
-    DeleteEventComment : builder.mutation({
-      query : (id) =>({
-        url : `DeleteEventComment?id=${id}`,
-        method : "DELETE",
-        body : {id}
+    DeleteEventComment: builder.mutation({
+      query: (id) => ({
+        url: `DeleteEventComment?id=${id}`,
+        method: "DELETE",
+        body: { id }
       }),
-      invalidatesTags : ["eventComments"]
+      invalidatesTags: ["eventComments"]
     }),
-    DeleteNewsComment : builder.mutation({
-      query : (id) =>({
-        url : `DeleteNewsComment?id=${id}`,
-        method : "DELETE",
-        body : {id}
+    DeleteNewsComment: builder.mutation({
+      query: (id) => ({
+        url: `DeleteNewsComment?id=${id}`,
+        method: "DELETE",
+        body: { id }
       }),
-      invalidatesTags : ["NewsComments"]
+      invalidatesTags: ["NewsComments"]
     }),
-    CommentOnNews : builder.mutation({
-      query : (credentials) => ({
-        url : "/CommentOnNews",
-        method:"POST",
-        body : credentials
+    CommentOnNews: builder.mutation({
+      query: (credentials) => ({
+        url: "/CommentOnNews",
+        method: "POST",
+        body: credentials
       }),
-      invalidatesTags : ["NewsComments"]
+      invalidatesTags: ["NewsComments"]
     }),
     registerUserForEvent: builder.mutation({
       query: (credentials) => ({
-        url: '/registerForEvent',   
+        url: '/registerForEvent',
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags : ["Registration" , "AllRegistrations","EventRegister"]
+      invalidatesTags: ["Registration", "AllRegistrations", "EventRegister"]
     }),
 
     unregisterUserFromEvent: builder.mutation({
       query: (credentials) => ({
-        url: '/unRegister',          
+        url: '/unRegister',
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags : ["Registration", "AllRegistrations","EventRegister"]
+      invalidatesTags: ["Registration", "AllRegistrations", "EventRegister"]
     }),
     editEvent: builder.mutation({
-    query: (updatedEvent) => ({
+      query: (updatedEvent) => ({
         url: "/EditEvent",
         method: "PUT",
         body: updatedEvent
+      }),
+      invalidatesTags: ["Events"],
     }),
-    invalidatesTags: ["Events"],
-}),
-editNews: builder.mutation({
-    query: (updatedNews) => ({
+    editNews: builder.mutation({
+      query: (updatedNews) => ({
         url: "/EditNews",
         method: "PUT",
         body: updatedNews
+      }),
+      invalidatesTags: ["News"],
     }),
-    invalidatesTags: ["News"],
-}),
   }),
+  
 });
 
 export const {
@@ -231,5 +240,6 @@ export const {
   useDeleteEventCommentMutation,
   useDeleteNewsCommentMutation,
   useEditEventMutation,
-  useEditNewsMutation
+  useEditNewsMutation,
+  useCreateEventMutation
 } = ApiSlice;

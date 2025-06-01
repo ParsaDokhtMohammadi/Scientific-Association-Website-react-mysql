@@ -118,7 +118,19 @@ async function startServer() {
     const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id WHERE s.status = 'pending' ORDER BY s.created_at");
     res.json({ data: rows });
   });
-
+  app.post("/CreateEvent", async (req, res) => {
+    const { title, description, date, presenter, capacity } = req.body;
+    try {
+        await db.query(
+            "INSERT INTO events (title, description, date, presenter, capacity) VALUES (?, ?, ?, ?, ?)",
+            [title, description, date, presenter, capacity]
+        );
+        res.json({ message: "Event created successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error creating event" });
+    }
+});
   app.post("/Submission", async (req, res) => {
     const { user_id, title, content } = req.body;
     await db.query("INSERT INTO submission (user_id, title, content) VALUES (?, ?, ?)", [user_id, title, content]);
