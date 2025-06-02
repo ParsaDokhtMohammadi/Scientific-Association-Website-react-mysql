@@ -47,10 +47,11 @@ export const ApiSlice = createApi({
     }),
     getSingleEvent: builder.query({
       query: (event_id) => `/singleEventData?id=${event_id}`,
-      providesTags: ["EventRegister"]
+      providesTags: ["EventRegister","Events"]
     }),
     getSingleNews: builder.query({
-      query: (id) => `/singleNewsData?id=${id}`
+      query: (id) => `/singleNewsData?id=${id}`,
+      providesTags : ["News"]
     }),
     getRegistration: builder.query({
       query: (id) => `Registration?id=${id}`,
@@ -121,6 +122,14 @@ export const ApiSlice = createApi({
         body: newEvent
       }),
       invalidatesTags: ["Events"]
+    }),
+    createNews : builder.mutation({
+      query:(newNews)=>({
+        url: "/CreateNews",
+        method:"POST",
+        body : newNews
+      }),
+      invalidatesTags : ["News"]
     }),
     PromoteUser: builder.mutation({
       query: (id) => ({
@@ -264,5 +273,6 @@ export const {
   useCreateEventMutation,
   useGetUserQuery,
   useUpdateUserMutation,
-  useGetSubmissionByIdQuery 
+  useGetSubmissionByIdQuery ,
+  useCreateNewsMutation
 } = ApiSlice;

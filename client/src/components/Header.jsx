@@ -45,7 +45,7 @@ const Header = () => {
             Users
           </NavLink>
         )}
-        {User?.role === "user" && (
+         
           <NavLink
             to="/UserRegistrations"
             className={({ isActive }) =>
@@ -54,7 +54,7 @@ const Header = () => {
           >
             Registrations
           </NavLink>
-        )}
+        
         {User && (
           <NavLink
             to="/EditUserProfile"

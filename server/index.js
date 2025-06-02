@@ -134,7 +134,7 @@ async function startServer() {
   });
   app.post("/CreateEvent", upload.single("image"), async (req, res) => {
   const { title, description, date, presenter, capacity } = req.body;
-  const img_path = req.file ? `/uploads/${req.file.filename}` : '/uploads/defaultEvent.jpg';
+  const img_path = req.file ? `/uploads/${req.file.filename}` : '/uploads/defaults/eventDefault.webp';
   try {
     await db.query(
       "INSERT INTO events (title, description, date, presenter, capacity, img_path) VALUES (?, ?, ?, ?, ?, ?)",
@@ -146,6 +146,13 @@ async function startServer() {
     res.status(500).json({ message: "Error creating event" });
   }
 });
+app.post("/CreateNews",upload.single("img") , async (req , res)=>{
+  const {title , content , author_id} = req.body
+  const img_path = req.file ? `/uploads/${req.file.filename}` : '/uploads/defaults/blogDefault.webp'
+  await db.query("insert into news (title , content , author_id , img_path) VALUES(?,?,?,?)",[title , content , author_id , img_path])
+  res.json({ message: "news created successfully" });
+
+})
 app.post("/Submission", upload.single("image"), async (req, res) => {
     const { user_id, title, content } = req.body;
     const img_path = req.file ?  `/uploads/${req.file.filename}` : '/uploads/defaults/blogDefault.webp'; 
@@ -258,24 +265,46 @@ app.post("/Submission", upload.single("image"), async (req, res) => {
     await db.query("DELETE from comment_news where id = ?" , [id])
     res.json({message:"comment deleted"})
   })
-  app.put("/EditEvent", async (req, res) => {
-    const { id, title, description, date, capacity, presenter, img_path } = req.body;
-
+ app.put("/EditEvent", upload.single("img"), async (req, res) => {
+    const { id, title, description, date, capacity, presenter } = req.body;
     try {
+        if (req.file) {
+            img_path = `/uploads/${req.file.filename}`;
+            const [rows] = await db.query("SELECT img_path FROM events WHERE id = ?", [id]);
+            if (rows.length > 0 && rows[0].img_path && rows[0].img_path !== '/uploads/defaults/eventDefault.webp') {
+                const oldImagePath = path.join(__dirname, rows[0].img_path);
+                fs.unlink(oldImagePath, (err) => {
+                    if (err) console.error("Error deleting old event image:", err);
+                });
+            }
+        }
         await db.query(
             "UPDATE events SET title = ?, description = ?, date = ?, capacity = ?, presenter = ?, img_path = ? WHERE id = ?",
             [title, description, date, capacity, presenter, img_path, id]
         );
+
         res.json({ message: "Event updated successfully" });
     } catch (error) {
         console.error("Error updating event:", error);
         res.status(500).json({ message: "Error updating event" });
     }
 });
-app.put("/EditNews", async (req, res) => {
-    const { id, title, content, img_path } = req.body;
+app.put("/EditNews", upload.single("img"), async (req, res) => {
+    const { id, title, content } = req.body;
+    let img_path = req.body.img_path;
 
     try {
+
+        if (req.file) {
+            img_path = `/uploads/${req.file.filename}`;
+            const [rows] = await db.query("SELECT img_path FROM news WHERE id = ?", [id]);
+            if (rows.length > 0 && rows[0].img_path && rows[0].img_path !== '/uploads/defaults/blogDefault.webp') {
+                const oldImagePath = path.join(__dirname, rows[0].img_path);
+                fs.unlink(oldImagePath, (err) => {
+                    if (err) console.error("Error deleting old image:", err);
+                });
+            }
+        }
         await db.query(
             "UPDATE news SET title = ?, content = ?, img_path = ? WHERE id = ?",
             [title, content, img_path, id]
