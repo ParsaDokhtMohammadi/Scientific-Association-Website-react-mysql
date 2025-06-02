@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className="w-full bg-[#1A1A1A] flex justify-between items-center px-4 py-3 mb-8 shadow-lg">
+    <header className={` w-full bg-[#1A1A1A] ${User===null ?"hidden":"flex"} justify-between items-center px-4 py-3 mb-8 shadow-lg`}>
       <img src="assets/img/logo.png" className="w-[75px]" alt="Logo" />
       <nav className="flex flex-row items-center gap-6">
         <NavLink
