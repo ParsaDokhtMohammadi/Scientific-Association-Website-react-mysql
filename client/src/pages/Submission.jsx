@@ -10,6 +10,7 @@ const Submission = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null); // NEW: preview state
   const [submit, { isLoading, isError, error }] = useSubmitMutation();
 
   const handleSubmit = async (e) => {
@@ -26,8 +27,20 @@ const Submission = () => {
       setTitle('');
       setContent('');
       setImage(null);
+      setPreviewUrl(null); // Clear preview after submission
     } catch (err) {
       console.error("Submission failed:", err);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) {
+      const preview = URL.createObjectURL(file);
+      setPreviewUrl(preview);
+    } else {
+      setPreviewUrl(null);
     }
   };
 
@@ -67,9 +80,16 @@ const Submission = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={handleImageChange} // Updated handler
               className="w-full p-2 border rounded bg-[#333] text-[#F5F5F5]"
             />
+            {/* Preview image */}
+            {previewUrl && (
+              <div className="mt-2">
+                <p className="text-sm text-[#A3A3A3]">Image Preview:</p>
+                <img src={previewUrl} alt="Preview" className="w-40 rounded object-cover" />
+              </div>
+            )}
           </div>
           <button
             type="submit"
@@ -88,7 +108,7 @@ const Submission = () => {
             <img
               src={`http://localhost:5000${subs.img_path}`}
               alt="img"
-              className="w-40  rounded object-cover h-[120px]"
+              className="w-40 rounded object-cover h-[120px]"
             />
             <div className="flex flex-col w-[500px] h-[124px]">
               <h2 className="text-2xl font-semibold mb-2">{subs.title}</h2>

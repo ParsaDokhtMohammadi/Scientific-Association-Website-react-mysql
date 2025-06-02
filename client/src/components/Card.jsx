@@ -7,7 +7,6 @@ const EventCard = ({Item , tag}) => {
     const navigate = useNavigate()
     const User = useSelector(state => state.CurrentUser.CurrentUser) 
     const [showDeletePopup, setShowDeletePopup] = useState(false)
-    console.log(Item)
     return (
         <>
             <div className='flex flex-col gap-2 p-2 bg-[#1A1A1A] w-fit rounded text-[#F5F5F5] md:max-w-[320px] max-w-[370px]'>

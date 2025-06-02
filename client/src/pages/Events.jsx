@@ -6,13 +6,13 @@ import { useNavigate } from "react-router";
 
 const Events = () => {
   const { data: Events, isLoading, error } = useGetEventsQuery();
-  const user = useSelector((state) => state.CurrentUser.CurrentUser);
+  const user = useSelector((state) => state.CurrentUser.CurrentUser); 
   const navigate = useNavigate();
 
   return (
     <div className="p-8">
       {user?.role === "admin" && (
-        <div className="mb-4 flex justify-end">
+        <div className="mb-14 flex justify-end">
           <button
             className="bg-[#06B6D4] hover:bg-[#0891B2] text-[#1A1A1A] font-bold py-2 px-4 rounded-md"
             onClick={() => navigate("/CreateEvent")}

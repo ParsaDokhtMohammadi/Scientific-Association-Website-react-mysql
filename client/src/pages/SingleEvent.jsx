@@ -40,7 +40,7 @@ const SingleEvent = () => {
     <div className="p-6 md:p-10 flex flex-col gap-10 bg-[#1A1A1A] text-[#F5F5F5] rounded-lg shadow-lg max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8 bg-[#2A2A2A] shadow-md rounded-2xl p-6">
         <img
-          src={event?.data[0].img_path}
+          src={`http://localhost:5000${event?.data[0]?.img_path}`}
           alt={event?.data[0].title || "Event"}
           className="w-full md:w-1/3 rounded-2xl object-cover"
         />
