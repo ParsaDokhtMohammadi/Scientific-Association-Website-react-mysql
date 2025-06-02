@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "DBApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
-  tagTypes: ["Events", "Users", "Admins&Members", "AllSubmissions", "PendingSubmissions", "News", "eventComments", "NewsComments", "AllRegistrations", "Registration", "EventRegister"],
+  tagTypes: ["Events", "Users", "Admins&Members", "AllSubmissions", "PendingSubmissions", "News", "eventComments", "NewsComments", "AllRegistrations", "Registration", "EventRegister" , 'userSubmission'],
   endpoints: (builder) => ({
     getEvents: builder.query({
       query: () => "/getEvents",
@@ -35,6 +35,7 @@ export const ApiSlice = createApi({
     }),
     getUserSubmissions: builder.query({
       query: (userId) => `/UserSubmission?id=${userId}`,
+      providesTags : ["userSubmission"]
     }),
     getEventComments: builder.query({
       query: (event_id) => `/GetEventComments?id=${event_id}`,
@@ -95,6 +96,7 @@ export const ApiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
+      invalidatesTags : ["userSubmission"]
     }),
     approveSubmission: builder.mutation({
       query: (id) => ({

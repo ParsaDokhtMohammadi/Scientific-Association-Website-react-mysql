@@ -11,7 +11,7 @@ const EventCard = ({Item , tag}) => {
     return (
         <>
             <div className='flex flex-col gap-2 p-2 bg-[#1A1A1A] w-fit rounded text-[#F5F5F5] md:max-w-[320px] max-w-[370px]'>
-                <img src={Item?.img_path} alt="" className='md:w-[300px] rounded' />
+                <img src={`http://localhost:5000${Item?.img_path}`} alt="" className='md:w-[300px] rounded object-cover h-[200px]' />
                 <h2 className='text-2xl px-2 truncate'>{Item?.title}</h2>
                 <p className='h-[75px] line-clamp-3 px-2 text-[#A3A3A3]'>{tag==="Event" ? Item?.description : Item?.content}</p>
                 <span className='px-2 text-sm text-[#A3A3A3]'>{tag==="Event" ? `presented by ${Item?.presenter}` : `author : ${Item?.user_name}`}</span>

@@ -18,9 +18,9 @@ const SingleNews = () => {
     <div className="p-6 md:p-10 flex flex-col gap-10 bg-[#1A1A1A] text-[#F5F5F5] rounded-lg shadow-lg max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8 bg-[#2A2A2A] shadow-md rounded-2xl p-6">
         <img
-          src={newsData?.img_path || "assets/img/blogDefault.webp"}
+          src={`http://localhost:5000${newsData?.img_path}`}
           alt={newsData?.title || "News"}
-          className="w-full md:w-1/3 rounded-2xl object-cover"
+          className="w-full md:w-1/3 rounded-2xl object-cover h-[250px]"
         />
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-[#06B6D4]">{newsData?.title}</h1>

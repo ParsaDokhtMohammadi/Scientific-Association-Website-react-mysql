@@ -3,10 +3,11 @@ const app = express();
 const mysql = require("mysql2/promise");
 const cors = require("cors");
 require("dotenv").config();
-
+const multer = require("multer");
+const path = require("path");
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173", methods: ["GET", "POST", "PUT", "DELETE"], credentials: true }));
-
+app.use('/uploads', express.static('uploads'));
 async function initializeDatabase() {
   const db = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -17,10 +18,23 @@ async function initializeDatabase() {
   console.log("Connected to MySQL");
   return db;
 }
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); 
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname)); 
+    }
+});
+const upload = multer({ storage });
+
+
+
 
 async function startServer() {
   const db = await initializeDatabase();
-
+  
   // Event Queries
   app.get("/getEvents", async (req, res) => {
     const [rows] = await db.query("SELECT * FROM events");
@@ -131,12 +145,21 @@ async function startServer() {
         res.status(500).json({ message: "Error creating event" });
     }
 });
-  app.post("/Submission", async (req, res) => {
+app.post("/Submission", upload.single("image"), async (req, res) => {
     const { user_id, title, content } = req.body;
-    await db.query("INSERT INTO submission (user_id, title, content) VALUES (?, ?, ?)", [user_id, title, content]);
-    res.json({ message: "Submission complete" });
-  });
+    const img_path = req.file ?  `/uploads/${req.file.filename}` : '/uploads/defaults/blogDefault.webp'; 
 
+    try {
+        await db.query(
+            "INSERT INTO submission (user_id, title, content, img_path) VALUES (?, ?, ?, ?)",
+            [user_id, title, content, img_path]
+        );
+        res.json({ message: "Submission complete" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error creating submission" });
+    }
+});
   app.get("/UserSubmission", async (req, res) => {
     const { id } = req.query;
     const [rows] = await db.query("SELECT s.*, u.user_name FROM submission s JOIN user u ON s.user_id = u.id WHERE s.user_id = ?", [id]);
@@ -148,7 +171,7 @@ async function startServer() {
     const [rows] = await db.query("SELECT * FROM submission WHERE id = ?", [id]);
     const submission = rows[0];
     await db.query("UPDATE submission SET status = 'approved' WHERE id = ?", [id]);
-    await db.query("INSERT INTO news (title, content, author_id) VALUES (?, ?, ?)", [submission.title, submission.content, submission.user_id]);
+    await db.query("INSERT INTO news (title, content, author_id, img_path) VALUES (?, ?, ?, ?)",[submission.title, submission.content, submission.user_id, submission.img_path]);
     res.json({ message: "Submission approved" });
   });
 

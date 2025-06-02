@@ -26,7 +26,7 @@ const SingleSubmissionPreview = () => {
         {new Date(submission?.created_at).toLocaleDateString()}
       </p>
       <img
-        src={submission?.img_path}
+        src={`http://localhost:5000${submission?.img_path}`}
         alt="Submission"
         className="w-full max-h-[300px] object-cover rounded-md mb-4"
       />
