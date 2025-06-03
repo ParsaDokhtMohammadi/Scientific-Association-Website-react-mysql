@@ -1,7 +1,8 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../features/UserSlice";
-
+import { IoLogOutOutline } from "react-icons/io5";
+import { FaUser } from "react-icons/fa6";
 const Header = () => {
   const User = useSelector(state => state.CurrentUser.CurrentUser);
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const Header = () => {
         <NavLink
           to="/Events"
           className={({ isActive }) =>
-            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#0891B2]`
           }
         >
           Events
@@ -22,7 +23,7 @@ const Header = () => {
         <NavLink
           to="/News"
           className={({ isActive }) =>
-            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#0891B2]`
           }
         >
           News
@@ -30,7 +31,7 @@ const Header = () => {
         <NavLink
           to={`${User?.role === "admin" ? "/SubmissionAdmin" : "/Submission"}`}
           className={({ isActive }) =>
-            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+            `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#0891B2]`
           }
         >
           Submissions
@@ -39,7 +40,7 @@ const Header = () => {
           <NavLink
             to="/UsersAdmin"
             className={({ isActive }) =>
-              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#0891B2]`
             }
           >
             Users
@@ -49,34 +50,35 @@ const Header = () => {
           <NavLink
             to="/UserRegistrations"
             className={({ isActive }) =>
-              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
+              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#0891B2]`
             }
           >
             Registrations
           </NavLink>
-        
+ 
+      </nav>
+      <div className="flex gap-2 items-center">
         {User && (
+           <>
           <NavLink
             to="/EditUserProfile"
-            className={({ isActive }) =>
-              `duration-200 text-[#F5F5F5] ${isActive ? "text-[#06B6D4]" : ""} hover:text-[#F87171]`
-            }
+            className={
+              `duration-200 text-[#06B6D4] hover:text-[#0891B2]`
+          }
           >
-            Edit Profile
+            <FaUser size={22}/>
           </NavLink>
-        )}
-      </nav>
-      <div className="flex gap-2">
-        {User && (
+     
           <button
-            className="rounded h-10 px-4 bg-[#06B6D4] text-[#1A1A1A] font-bold hover:bg-[#F87171] transition-colors duration-200"
+            className="rounded h-10 px-4   text-[#06B6D4] hover:text-[#0891B2] transition-colors duration-200"
             onClick={() => {
               dispatch(clearUser());
               navigate("/");
             }}
-          >
-            Logout
+            >
+            <IoLogOutOutline size={28}/>
           </button>
+            </>      
         )}
       </div>
     </header>
