@@ -42,22 +42,22 @@ const EventCard = ({ Item, tag }) => {
                         >
                             Details
                         </button>
-                        {User?.role === "admin" && (
+                       
                             <>
                                 <button
-                                    className="flex-1 bg-[#06B6D4] hover:bg-[#0891B2] text-[#1A1A1A] font-bold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer"
+                                    className={`${(User.role === "admin" || (User.role === "member" && tag !== "Event")) ? "flex-1" : "hidden"} bg-[#06B6D4] hover:bg-[#0891B2] text-[#1A1A1A] font-bold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer`}
                                     onClick={tag === "Event" ? () => navigate(`/EditEventForm/${Item?.id}`) : () => navigate(`/EditNewsForm/${Item?.id}`)}
                                 >
                                     Edit
                                 </button>
                                 <button
-                                    className="flex-1 bg-[#06B6D4] hover:bg-[#0891B2] text-[#1A1A1A] font-bold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer"
+                                    className={`${(User.role === "admin" || (User.role === "member" && tag !== "Event")) ? "flex-1" : "hidden"} bg-[#06B6D4] hover:bg-[#0891B2] text-[#1A1A1A] font-bold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer`}
                                     onClick={() => setShowDeletePopup(true)}
                                 >
                                     Delete
                                 </button>
                             </>
-                        )}
+                       
                     </div>
                 </div>
             </div>
