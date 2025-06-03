@@ -359,3 +359,60 @@ app.delete("/deleteSubmission", async (req , res)=>{
 }
 
 startServer();
+
+//  tests 
+
+if (process.argv[2] === "test") {
+  const request = require("supertest");
+
+  (async () => {
+    try {
+      console.log("Running API tests...");
+
+      await new Promise((r) => setTimeout(r, 1000));
+
+      console.log("Test 1: GET /getEvents");
+      let res = await request(app).get("/getEvents");
+      if (res.status !== 200) throw new Error("GET /getEvents failed");
+
+      console.log("Test 2: GET /getUsers");
+      res = await request(app).get("/getUsers");
+      if (res.status !== 200) throw new Error("GET /getUsers failed");
+
+      console.log("Test 3: POST /Login with bad credentials");
+      res = await request(app).post("/Login").send({ user_name: "wronguser", password: "wrongpass" });
+      if (res.status !== 401) throw new Error("POST /Login bad credentials test failed");
+
+      console.log("Test 4: POST /Register with empty fields");
+      res = await request(app).post("/Register").send({ user_name: "", password: "", email: "" });
+      if (![400, 500].includes(res.status)) throw new Error("POST /Register invalid data test failed");
+
+      console.log("Test 5: GET /getAdmins&members");
+      res = await request(app).get("/getAdmins&members");
+      if (res.status !== 200) throw new Error("GET /getAdmins&members failed");
+
+      console.log("Test 6: GET /singleEventData with invalid ID");
+      res = await request(app).get("/singleEventData").query({ id: -1 });
+      if (res.status !== 200) throw new Error("GET /singleEventData with invalid id failed");
+
+      console.log("Test 7: POST /registerForEvent with dummy data");
+      res = await request(app).post("/registerForEvent").send({ event_id: 1, user_id: 1 });
+      if (![200, 500].includes(res.status)) throw new Error("POST /registerForEvent failed");
+
+      console.log("Test 8: GET /getNews");
+      res = await request(app).get("/getNews");
+      if (res.status !== 200) throw new Error("GET /getNews failed");
+
+     
+      console.log("Test 9: GET /UserSubmission with dummy user id");
+      res = await request(app).get("/UserSubmission").query({ id: 1 });
+      if (res.status !== 200) throw new Error("GET /UserSubmission failed");
+
+      console.log("✅ All tests passed!");
+      process.exit(0);
+    } catch (err) {
+      console.error("❌ Tests failed:", err.message);
+      process.exit(1);
+    }
+  })();
+}
