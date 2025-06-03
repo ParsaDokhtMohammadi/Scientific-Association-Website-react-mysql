@@ -105,7 +105,7 @@ export const ApiSlice = createApi({
         method: "POST",
         body: { id },
       }),
-      invalidatesTags: ["PendingSubmissions", "AllSubmissions","Submissions"],
+      invalidatesTags: ["PendingSubmissions", "AllSubmissions","Submissions","News"],
     }),
     rejectSubmission: builder.mutation({
       query: (id) => ({

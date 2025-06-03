@@ -37,7 +37,7 @@ async function startServer() {
   
   // Event Queries
   app.get("/getEvents", async (req, res) => {
-    const [rows] = await db.query("SELECT * FROM events");
+    const [rows] = await db.query("SELECT * FROM events order by created_at desc");
     res.json({ data: rows });
   });
 
@@ -202,7 +202,7 @@ app.post("/Submission", upload.single("image"), async (req, res) => {
 });
   // News Management
   app.get("/getNews", async (req, res) => {
-    const [rows] = await db.query("SELECT n.*, u.user_name FROM news n JOIN user u ON n.author_id = u.id");
+    const [rows] = await db.query("SELECT n.*, u.user_name FROM news n JOIN user u ON n.author_id = u.id order by created_at desc");
     res.json({ data: rows });
   });
 
@@ -267,6 +267,7 @@ app.post("/Submission", upload.single("image"), async (req, res) => {
   })
  app.put("/EditEvent", upload.single("img"), async (req, res) => {
     const { id, title, description, date, capacity, presenter } = req.body;
+    let img_path = req.body.img_path;
     try {
         if (req.file) {
             img_path = `/uploads/${req.file.filename}`;
