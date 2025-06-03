@@ -342,6 +342,17 @@ app.get("/getUser", async (req, res) => {
     res.status(500).json({ message: "Error fetching user" });
   }
 });
+app.delete("/deleteSubmission", async (req , res)=>{
+  const {id} = req.query
+  try{
+    await db.query("delete from submission where id = ?", [id])
+    res.json({message:"deleted"})
+  }
+  catch(err){
+    console.log(err)
+    res.status(500).json({message:"server error"})
+  }
+})
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

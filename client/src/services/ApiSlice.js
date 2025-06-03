@@ -105,7 +105,7 @@ export const ApiSlice = createApi({
         method: "POST",
         body: { id },
       }),
-      invalidatesTags: ["PendingSubmissions", "AllSubmissions","Submissions","News"],
+      invalidatesTags: ["PendingSubmissions", "AllSubmissions","Submissions","News","userSubmission"],
     }),
     rejectSubmission: builder.mutation({
       query: (id) => ({
@@ -233,6 +233,14 @@ export const ApiSlice = createApi({
       query: (id) => `/getUser?id=${id}`,
       providesTags: ["CurrentUser"],
     }),
+    deleteSubmission: builder.mutation({
+      query : (id)=>({
+        url : `/deleteSubmission?id=${id}`,
+        method : "DELETE",
+        body : id
+      }),
+      invalidatesTags : ["AllSubmissions" , "PendingSubmissions" , "userSubmission"]
+    })
   }),
 
 
@@ -274,5 +282,6 @@ export const {
   useGetUserQuery,
   useUpdateUserMutation,
   useGetSubmissionByIdQuery ,
-  useCreateNewsMutation
+  useCreateNewsMutation , 
+  useDeleteSubmissionMutation
 } = ApiSlice;
