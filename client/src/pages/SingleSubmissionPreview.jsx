@@ -1,12 +1,21 @@
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   useGetSubmissionByIdQuery,
   useApproveSubmissionMutation,
   useRejectSubmissionMutation,
 } from "../services/ApiSlice";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const SingleSubmissionPreview = () => {
+    const User = useSelector((state) => state.CurrentUser.CurrentUser);
+    const navigate = useNavigate()
+  useEffect(() => {
+    if (!User) {
+      navigate("/");
+    }
+  }, []);
   const { id } = useParams();
   const { data, isLoading, error, refetch } = useGetSubmissionByIdQuery(id);
   const [approveSubmission] = useApproveSubmissionMutation();

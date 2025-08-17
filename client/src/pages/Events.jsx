@@ -3,11 +3,19 @@ import { useGetEventsQuery } from "../services/ApiSlice";
 import EventCard from "../components/Card";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const Events = () => {
   const { data: Events, isLoading, error } = useGetEventsQuery();
-  const user = useSelector((state) => state.CurrentUser.CurrentUser); 
+  const user = useSelector((state) => state.CurrentUser.CurrentUser);
   const navigate = useNavigate();
+
+  const User = useSelector((state) => state.CurrentUser.CurrentUser);
+  useEffect(() => {
+    if (!User) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="p-8">

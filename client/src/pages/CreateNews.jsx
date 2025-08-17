@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useCreateNewsMutation } from "../services/ApiSlice";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 const CreateNews = () => {
+
   const User = useSelector(state => state.CurrentUser.CurrentUser);
+    const navigate = useNavigate();
+    useEffect(() => {
+      if (!User) {
+        navigate("/");
+      }
+      else if(User?.role!=="admin"){
+        navigate("/Events")
+      }
+    }, []);
   const author_id = parseInt(User?.id) 
   const [form, setForm] = useState({
     title: "",

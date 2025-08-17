@@ -1,7 +1,20 @@
 import React, { useState } from "react";
 import { useCreateEventMutation } from "../services/ApiSlice";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const CreateEvent = () => {
+    const navigate = useNavigate();
+  const User = useSelector((state) => state.CurrentUser.CurrentUser);
+  useEffect(() => {
+    if (!User) {
+      navigate("/");
+    }
+    else if(User?.role!=="admin"){
+      navigate("/Events")
+    }
+  }, []);
   const [form, setForm] = useState({
     title: "",
     description: "",

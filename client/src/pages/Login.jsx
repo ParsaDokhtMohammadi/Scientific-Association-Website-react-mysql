@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 import { useLoginMutation } from '../services/ApiSlice';
 import { useNavigate, Link } from "react-router";
 import { setUser } from '../features/UserSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  
   const [user_name, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading, isError, error }] = useLoginMutation();
-
+  const User = useSelector(state => state.CurrentUser.CurrentUser);
+  useEffect(()=>{
+    if(User){
+      navigate("/Events")
+    }
+  },[])
+ 
+  
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const response = await login({ user_name, password }).unwrap();
       console.log('Login successful:', response);

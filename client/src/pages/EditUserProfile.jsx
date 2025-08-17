@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetUserQuery, useUpdateUserMutation } from "../services/ApiSlice";
+import { useNavigate } from "react-router";
 
 const EditUserProfile = () => {
   const currentUser = useSelector((state) => state.CurrentUser.CurrentUser); // Replace with your user slice
+  const navigate = useNavigate()  
+  useEffect(() => {
+      if (!currentUser) {
+        navigate("/");
+      }
+    }, []);
+  
   const userId = currentUser?.id;
 
   const { data: userData, isLoading } = useGetUserQuery(userId);

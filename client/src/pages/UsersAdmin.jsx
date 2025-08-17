@@ -6,6 +6,9 @@ import {
   useDemoteUserMutation,
   useGetAdminsMembersQuery
 } from '../services/ApiSlice'
+import { useNavigate } from 'react-router'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 const UsersAdmin = () => {
   const [view, SetView] = useState("users")
@@ -14,6 +17,16 @@ const UsersAdmin = () => {
   const [Promote] = usePromoteUserMutation()
   const [Demote] = useDemoteUserMutation()
   const [PromoteToAdmin] = usePromoteToAdminMutation()
+  const navigate = useNavigate();
+  const User = useSelector((state) => state.CurrentUser.CurrentUser);
+  useEffect(() => {
+    if (!User) {
+      navigate("/");
+    }
+    else if(User?.role!=="admin"){
+      navigate("/Events")
+    }
+  }, []);
 
   return (
     <>

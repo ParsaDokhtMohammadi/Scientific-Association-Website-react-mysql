@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { useRegisterMutation } from "../services/ApiSlice";
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const Register = () => {
   const [user_name, setUserName] = useState("");
@@ -9,6 +11,12 @@ const Register = () => {
   const [register, { isLoading, isError, error }] = useRegisterMutation();
   const navigate = useNavigate();
 
+  const User = useSelector(state => state.CurrentUser.CurrentUser);
+  useEffect(()=>{
+    if(User){
+      navigate("/Events")
+    }
+  },[])
   const handleRegister = async (e) => {
     e.preventDefault();
     try {

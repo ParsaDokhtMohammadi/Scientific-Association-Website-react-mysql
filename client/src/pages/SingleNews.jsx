@@ -3,11 +3,18 @@ import { useParams } from "react-router";
 import { useGetSingleNewsQuery } from "../services/ApiSlice"; 
 import { useSelector } from "react-redux";
 import CommentsNews from "../components/CommentsNews";
+import { useEffect } from "react";
 
 const SingleNews = () => {
   const { id } = useParams();
   const { data: news, isLoading, error } = useGetSingleNewsQuery(id);
-  console.log(news)
+  
+    const User = useSelector((state) => state.CurrentUser.CurrentUser);
+    useEffect(() => {
+      if (!User) {
+        navigate("/");
+      }
+    }, []);
 
   if (isLoading) return <div className="text-[#06B6D4] font-medium">Loading...</div>;
   if (error) return <div className="text-[#EF4444] font-medium">Error loading news data.</div>;

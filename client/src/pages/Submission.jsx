@@ -5,10 +5,18 @@ import {
   useDeleteSubmissionMutation,
 } from "../services/ApiSlice";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const Submission = () => {
   const User = useSelector((state) => state.CurrentUser.CurrentUser);
-  const [user_id] = useState(User.id);
+  const navigate = useNavigate()
+    useEffect(() => {
+      if (!User) {
+        navigate("/");
+      }
+    }, []);
+  const [user_id] = useState(User?.id);
   const { data: userSubmissions } = useGetUserSubmissionsQuery(user_id);
 
   const [title, setTitle] = useState("");

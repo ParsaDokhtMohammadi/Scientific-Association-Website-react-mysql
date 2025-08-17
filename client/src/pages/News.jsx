@@ -3,11 +3,19 @@ import { useGetNewsQuery } from "../services/ApiSlice";
 import Card from "../components/Card";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 const News = () => {
   const { data: News, isLoading, error } = useGetNewsQuery();
   const user = useSelector((state) => state.CurrentUser.CurrentUser); 
   const navigate = useNavigate();
 
+
+    const User = useSelector(state => state.CurrentUser.CurrentUser);
+    useEffect(()=>{
+      if(!User){
+        navigate("/Events")
+      }
+    },[])
   return (
     <div className="p-8">
       {user?.role !== "user" && (

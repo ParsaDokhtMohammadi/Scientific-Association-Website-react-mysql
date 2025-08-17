@@ -1,40 +1,59 @@
-import React from "react"; 
 import Comments from "../components/Comments";
 import { useParams } from "react-router";
 import {
   useGetSingleEventQuery,
   useRegisterUserForEventMutation,
   useUnregisterUserFromEventMutation,
-  useGetRegistrationQuery
+  useGetRegistrationQuery,
 } from "../services/ApiSlice";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const SingleEvent = () => {
-  const User = useSelector(state => state.CurrentUser.CurrentUser);
+  const User = useSelector((state) => state.CurrentUser.CurrentUser);
+
+  useEffect(() => {
+    if (!User) {
+      navigate("/");
+    }
+  }, []);
+
   const user_id = User.id;
   const { id } = useParams();
   const event_id = parseInt(id);
 
-  const { data: event, isLoading, error, refetch: refetchEvent } = useGetSingleEventQuery(id);
+  const {
+    data: event,
+    isLoading,
+    error,
+    refetch: refetchEvent,
+  } = useGetSingleEventQuery(id);
   const [Register] = useRegisterUserForEventMutation();
   const [unRegister] = useUnregisterUserFromEventMutation();
-  const { data: UserRegistration, refetch: refetchRegistration } = useGetRegistrationQuery(User.id);
+  const { data: UserRegistration, refetch: refetchRegistration } =
+    useGetRegistrationQuery(User.id);
 
   const checkRegistration = () => {
-    return UserRegistration?.data.find(item => item.event_id == id);
+    return UserRegistration?.data.find((item) => item.event_id == id);
   };
 
   const handleClick = async () => {
-      if (checkRegistration() === undefined) {
-        await Register({ event_id, user_id });
-      } else {
-        await unRegister({ event_id, user_id });
-      }
-      await Promise.all([refetchEvent(), refetchRegistration()]);
+    if (checkRegistration() === undefined) {
+      await Register({ event_id, user_id });
+    } else {
+      await unRegister({ event_id, user_id });
+    }
+    await Promise.all([refetchEvent(), refetchRegistration()]);
   };
 
-  if (isLoading) return <div className="text-[#06B6D4] font-medium">Loading...</div>;
-  if (error) return <div className="text-[#EF4444] font-medium">Error loading event data.</div>;
+  if (isLoading)
+    return <div className="text-[#06B6D4] font-medium">Loading...</div>;
+  if (error)
+    return (
+      <div className="text-[#EF4444] font-medium">
+        Error loading event data.
+      </div>
+    );
 
   return (
     <div className="p-6 md:p-10 flex flex-col gap-10 bg-[#1A1A1A] text-[#F5F5F5] rounded-lg shadow-lg max-w-5xl mx-auto">
@@ -70,7 +89,9 @@ const SingleEvent = () => {
           <button
             className="bg-[#06B6D4] text-[#1A1A1A] font-bold py-2 px-4 rounded-md hover:bg-[#0891B2] transition-colors duration-200"
             onClick={handleClick}
-             disabled={event?.data[0].capacity === 0 && checkRegistration() === undefined}
+            disabled={
+              event?.data[0].capacity === 0 && checkRegistration() === undefined
+            }
           >
             {checkRegistration() === undefined ? "Register" : "Unregister"}
           </button>

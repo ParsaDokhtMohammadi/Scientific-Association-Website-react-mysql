@@ -6,7 +6,20 @@ import {
   useRejectSubmissionMutation,
 } from "../services/ApiSlice";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+
 const SubmissionAdmin = () => {
+  const navigate = useNavigate();
+  const User = useSelector((state) => state.CurrentUser.CurrentUser);
+  useEffect(() => {
+    if (!User) {
+      navigate("/");
+    }
+    else if(User?.role!=="admin"){
+      navigate("/Events")
+    }
+  }, []);
   const {
     data: AllSubmissions,
     isLoading,
@@ -17,7 +30,7 @@ const SubmissionAdmin = () => {
     useApproveSubmissionMutation();
   const [rejectSubmission, {}] = useRejectSubmissionMutation(); 
   const [view, SetView] = useState("pending");
-  const navigate = useNavigate();
+
   return (
     <>
       <div className="flex flex-col w-full mx-auto max-w-[80%] border  rounded bg-[#1A1A1A]">
